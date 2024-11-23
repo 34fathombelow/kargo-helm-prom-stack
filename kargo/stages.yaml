@@ -7,7 +7,7 @@ metadata:
     kargo.akuity.io/color: red
     argocd.argoproj.io/sync-wave: "2"
 spec:
-  shard: dev
+  shard: default # change to dev after testing
   requestedFreight:
   - origin:
       kind: Warehouse
@@ -31,71 +31,67 @@ spec:
       direct: true
   promotionTemplate:
     spec:
+      vars:
+      - name: gitRepo
+        value: https://github.com/34fathombelow/kargo-helm-prom-stack.git
+      - name: chartName
+        value: kube-prometheus-stack
+      - name: chartRepo
+        value: https://prometheus-community.github.io/helm-charts
+      - name: helmSrc
+        value: ./src/kube-prometheus-stack/env/${{ ctx.stage }}
+      - name: srcPath
+        value: ./src
+      - name: outPath
+        value: ./out
+      - name: targetBranch
+        value: test/${{ ctx.stage }}  # Change to env/${{ ctx.stage }} after testing
       steps:
       - uses: git-clone
         config:
-          repoURL: https://github.com/34fathombelow/kargo-helm-prom-stack.git
+          repoURL: ${{ vars.gitRepo }}
           checkout:
-          - branch: main
+          - branch: expression_lang # Change to main after testing
             path: ./src
-          - branch: env/dev
+          - branch: ${{ vars.targetBranch }}
             create: true
             path: ./out
-
       - uses: git-clear
         config:
           path: ./out
-
-      - uses: kustomize-build
-        config:
-          path: ./src/addons
-          outPath: ./out/addons.yaml
-
+      # re-enable after testing
+      # - uses: kustomize-build
+      #   config:
+      #     path: ./src/addons
+      #     outPath: ./out/addons.yaml
       - uses: helm-update-chart
         as: update-chart
         config:
-          path: ./src/kube-prometheus-stack/env/dev
+          path: ${{ vars.helmSrc }}
           charts:
-          - name: kube-prometheus-stack
-            repository: https://prometheus-community.github.io/helm-charts
-            fromOrigin:
-              kind: Warehouse
-              name: kube-prometheus-stack
-
-      - uses: helm-update-image
+          - name: ${{ vars.chartName }}
+            repository: ${{ vars.chartRepo}}
+            version: ${{ chartFrom(vars.chartRepo, vars.chartName, warehouse(vars.chartName)).Version }}
+      - uses: yaml-update
         as: update-images
         config:
-          path: ./src/kube-prometheus-stack/env/dev/values.yaml
-          images:
-          - image: docker.io/grafana/grafana
-            key: kube-prometheus-stack.grafana.image.tag
-            value: Tag
-            fromOrigin:
-              kind: Warehouse
-              name: grafana
-          - image: quay.io/prometheus/alertmanager
-            key: kube-prometheus-stack.alertmanager.alertmanagerSpec.image.tag
-            value: Tag
-            fromOrigin:
-              kind: Warehouse
-              name: alertmanager
-          - image: quay.io/prometheus/prometheus
-            key: kube-prometheus-stack.prometheus.prometheusSpec.image.tag
-            value: Tag
-            fromOrigin:
-              kind: Warehouse
-              name: prometheus
-
+          path: ${{ vars.helmSrc }}/values.yaml
+          updates:
+          - key: ${{ vars.chartName }}.grafana.image.tag
+            value: ${{ imageFrom("docker.io/grafana/grafana", warehouse("grafana")).Tag }}
+          - key: ${{ vars.chartName }}.alertmanager.alertmanagerSpec.image.tag
+            value: ${{ imageFrom("quay.io/prometheus/alertmanager", warehouse("alertmanager")).Tag }}
+          - key: ${{ vars.chartName }}.prometheus.prometheusSpec.image.tag
+            value: ${{ imageFrom("quay.io/prometheus/prometheus", warehouse("prometheus")).Tag }}
       - uses: helm-template
         config:
-          path: ./src/kube-prometheus-stack/env/dev
-          releaseName: kube-prometheus-stack
+          path: ${{ vars.helmSrc }}
+          releaseName: ${{ vars.chartName }}
           namespace: monitoring
           includeCRDs: true
           valuesFiles:
-          - ./src/kube-prometheus-stack/env/dev/values.yaml
+          - ${{ vars.helmSrc }}/values.yaml
           outPath: ./out/manifests.yaml
-
       # Commit image & Chart changes to the Git repository.
       - uses: git-commit
         as: image-update
@@ -104,314 +100,311 @@ spec:
           messageFromSteps:
           - update-chart
           - update-images
-
       # Commit helm-template changes to the Git repository.
       - uses: git-commit
         as: commit
         config:
           path: ./out
           message: rendered updated manifests
-
       # Push image & Chart changes to the Git repository.
       - uses: git-push
         config:
           path: ./src
-
       # Push the helm-template to the Git repository.
       - uses: git-push
         config:
           path: ./out
-
+      # Update Argo CD application
       - uses: argocd-update
         config:
           apps:
-          - name: kube-prometheus-stack-dev
+          - name: ${{ vars.chartName }}-${{ ctx.stage }}
             sources:
-            - repoURL: https://github.com/34fathombelow/kargo-helm-prom-stack.git
-              desiredCommitFromStep: commit
-
+            - repoURL: ${{ vars.gitRepo }}
+              desiredRevision: ${{ outputs.commit.commit }}
   verification:
     analysisTemplates:
     - name: prometheus-is-up
 
----
-apiVersion: kargo.akuity.io/v1alpha1
-kind: Stage
-metadata:
-  name: test
-  namespace: kargo-helm-prom-stack
-  annotations:
-    kargo.akuity.io/color: orange
-    argocd.argoproj.io/sync-wave: "2"
-spec:
-  shard: test
-  requestedFreight:
-  - origin:
-      kind: Warehouse
-      name: kube-prometheus-stack
-    sources:
-      stages:
-      - dev
-  - origin:
-      kind: Warehouse
-      name: grafana
-    sources:
-      stages:
-      - dev
-  - origin:
-      kind: Warehouse
-      name: alertmanager
-    sources:
-      stages:
-      - dev
-  - origin:
-      kind: Warehouse
-      name: prometheus
-    sources:
-      stages:
-      - dev
-  promotionTemplate:
-    spec:
-      steps:
-      - uses: git-clone
-        config:
-          repoURL: https://github.com/34fathombelow/kargo-helm-prom-stack.git
-          checkout:
-          - branch: main
-            path: ./src
-          - branch: env/test
-            create: true
-            path: ./out
-
-      - uses: git-clear
-        config:
-          path: ./out
-
-      - uses: kustomize-build
-        config:
-          path: ./src/addons
-          outPath: ./out/addons.yaml
-
-      - uses: helm-update-chart
-        as: update-chart
-        config:
-          path: ./src/kube-prometheus-stack/env/test
-          charts:
-          - name: kube-prometheus-stack
-            repository: https://prometheus-community.github.io/helm-charts
-            fromOrigin:
-              kind: Warehouse
-              name: kube-prometheus-stack
-
-      - uses: helm-update-image
-        as: update-images
-        config:
-          path: ./src/kube-prometheus-stack/env/test/values.yaml
-          images:
-          - image: docker.io/grafana/grafana
-            key: kube-prometheus-stack.grafana.image.tag
-            value: Tag
-            fromOrigin:
-              kind: Warehouse
-              name: grafana
-          - image: quay.io/prometheus/alertmanager
-            key: kube-prometheus-stack.alertmanager.alertmanagerSpec.image.tag
-            value: Tag
-            fromOrigin:
-              kind: Warehouse
-              name: alertmanager
-          - image: quay.io/prometheus/prometheus
-            key: kube-prometheus-stack.prometheus.prometheusSpec.image.tag
-            value: Tag
-            fromOrigin:
-              kind: Warehouse
-              name: prometheus
-
-      - uses: helm-template
-        config:
-          path: ./src/kube-prometheus-stack/env/test
-          releaseName: kube-prometheus-stack
-          namespace: monitoring
-          includeCRDs: true
-          valuesFiles:
-          - ./src/kube-prometheus-stack/env/test/values.yaml
-          outPath: ./out/manifests.yaml
-
-      # Commit image & Chart changes to the Git repository.
-      - uses: git-commit
-        as: chart-update
-        config:
-          path: ./src
-          messageFromSteps:
-          - update-chart
-          - update-images
-
-      # Commit helm-template changes to the Git repository.
-      - uses: git-commit
-        as: commit
-        config:
-          path: ./out
-          message: rendered updated manifests
-
-      # Push image & Chart changes to the Git repository.
-      - uses: git-push
-        config:
-          path: ./src
-
-      # Push the helm-template to the Git repository.
-      - uses: git-push
-        config:
-          path: ./out
-
-      - uses: argocd-update
-        config:
-          apps:
-          - name: kube-prometheus-stack-test
-            sources:
-            - repoURL: https://github.com/34fathombelow/kargo-helm-prom-stack.git
-              desiredCommitFromStep: commit
-
-  verification:
-    analysisTemplates:
-    - name: prometheus-is-up
-
----
-apiVersion: kargo.akuity.io/v1alpha1
-kind: Stage
-metadata:
-  name: prod
-  namespace: kargo-helm-prom-stack
-  annotations:
-    kargo.akuity.io/color: green
-    argocd.argoproj.io/sync-wave: "2"
-spec:
-  shard: prod
-  requestedFreight:
-  - origin:
-      kind: Warehouse
-      name: kube-prometheus-stack
-    sources:
-      stages:
-      - test
-  - origin:
-      kind: Warehouse
-      name: grafana
-    sources:
-      stages:
-      - test
-  - origin:
-      kind: Warehouse
-      name: alertmanager
-    sources:
-      stages:
-      - test
-  - origin:
-      kind: Warehouse
-      name: prometheus
-    sources:
-      stages:
-      - test
-  promotionTemplate:
-    spec:
-      steps:
-      - uses: git-clone
-        config:
-          repoURL: https://github.com/34fathombelow/kargo-helm-prom-stack.git
-          checkout:
-          - branch: main
-            path: ./src
-          - branch: env/prod
-            create: true
-            path: ./out
-
-      - uses: git-clear
-        config:
-          path: ./out
-
-      - uses: kustomize-build
-        config:
-          path: ./src/addons
-          outPath: ./out/addons.yaml
-
-      - uses: helm-update-chart
-        as: update-chart
-        config:
-          path: ./src/kube-prometheus-stack/env/prod
-          charts:
-          - name: kube-prometheus-stack
-            repository: https://prometheus-community.github.io/helm-charts
-            fromOrigin:
-              kind: Warehouse
-              name: kube-prometheus-stack
-
-      - uses: helm-update-image
-        as: update-images
-        config:
-          path: ./src/kube-prometheus-stack/env/prod/values.yaml
-          images:
-          - image: docker.io/grafana/grafana
-            key: kube-prometheus-stack.grafana.image.tag
-            value: Tag
-            fromOrigin:
-              kind: Warehouse
-              name: grafana
-          - image: quay.io/prometheus/alertmanager
-            key: kube-prometheus-stack.alertmanager.alertmanagerSpec.image.tag
-            value: Tag
-            fromOrigin:
-              kind: Warehouse
-              name: alertmanager
-          - image: quay.io/prometheus/prometheus
-            key: kube-prometheus-stack.prometheus.prometheusSpec.image.tag
-            value: Tag
-            fromOrigin:
-              kind: Warehouse
-              name: prometheus
-
-      - uses: helm-template
-        config:
-          path: ./src/kube-prometheus-stack/env/prod
-          releaseName: kube-prometheus-stack
-          namespace: monitoring
-          includeCRDs: true
-          valuesFiles:
-          - ./src/kube-prometheus-stack/env/prod/values.yaml
-          outPath: ./out/manifests.yaml
-
-      # Commit image & Chart changes to the Git repository.
-      - uses: git-commit
-        as: chart-update
-        config:
-          path: ./src
-          messageFromSteps:
-          - update-chart
-          - update-images
-
-      # Commit helm-template changes to the Git repository.
-      - uses: git-commit
-        as: commit
-        config:
-          path: ./out
-          message: rendered updated manifests
-
-      # Push image & Chart changes to the Git repository.
-      - uses: git-push
-        config:
-          path: ./src
-
-      # Push the helm-template to the Git repository.
-      - uses: git-push
-        config:
-          path: ./out
-
-      - uses: argocd-update
-        config:
-          apps:
-          - name: kube-prometheus-stack-prod
-            sources:
-            - repoURL: https://github.com/34fathombelow/kargo-helm-prom-stack.git
-              desiredCommitFromStep: commit
-
-  verification:
-    analysisTemplates:
-    - name: prometheus-is-up
+# ---
+# apiVersion: kargo.akuity.io/v1alpha1
+# kind: Stage
+# metadata:
+#   name: test
+#   namespace: kargo-helm-prom-stack
+#   annotations:
+#     kargo.akuity.io/color: orange
+#     argocd.argoproj.io/sync-wave: "2"
+# spec:
+#   shard: test
+#   requestedFreight:
+#   - origin:
+#       kind: Warehouse
+#       name: kube-prometheus-stack
+#     sources:
+#       stages:
+#       - dev
+#   - origin:
+#       kind: Warehouse
+#       name: grafana
+#     sources:
+#       stages:
+#       - dev
+#   - origin:
+#       kind: Warehouse
+#       name: alertmanager
+#     sources:
+#       stages:
+#       - dev
+#   - origin:
+#       kind: Warehouse
+#       name: prometheus
+#     sources:
+#       stages:
+#       - dev
+#   promotionTemplate:
+#     spec:
+#       steps:
+#       - uses: git-clone
+#         config:
+#           repoURL: https://github.com/34fathombelow/kargo-helm-prom-stack.git
+#           checkout:
+#           - branch: main
+#             path: ./src
+#           - branch: env/test
+#             create: true
+#             path: ./out
+#
+#       - uses: git-clear
+#         config:
+#           path: ./out
+#
+#       - uses: kustomize-build
+#         config:
+#           path: ./src/addons
+#           outPath: ./out/addons.yaml
+#
+#       - uses: helm-update-chart
+#         as: update-chart
+#         config:
+#           path: ./src/kube-prometheus-stack/env/test
+#           charts:
+#           - name: kube-prometheus-stack
+#             repository: https://prometheus-community.github.io/helm-charts
+#             fromOrigin:
+#               kind: Warehouse
+#               name: kube-prometheus-stack
+#
+#       - uses: helm-update-image
+#         as: update-images
+#         config:
+#           path: ./src/kube-prometheus-stack/env/test/values.yaml
+#           images:
+#           - image: docker.io/grafana/grafana
+#             key: kube-prometheus-stack.grafana.image.tag
+#             value: Tag
+#             fromOrigin:
+#               kind: Warehouse
+#               name: grafana
+#           - image: quay.io/prometheus/alertmanager
+#             key: kube-prometheus-stack.alertmanager.alertmanagerSpec.image.tag
+#             value: Tag
+#             fromOrigin:
+#               kind: Warehouse
+#               name: alertmanager
+#           - image: quay.io/prometheus/prometheus
+#             key: kube-prometheus-stack.prometheus.prometheusSpec.image.tag
+#             value: Tag
+#             fromOrigin:
+#               kind: Warehouse
+#               name: prometheus
+#
+#       - uses: helm-template
+#         config:
+#           path: ./src/kube-prometheus-stack/env/test
+#           releaseName: kube-prometheus-stack
+#           namespace: monitoring
+#           includeCRDs: true
+#           valuesFiles:
+#           - ./src/kube-prometheus-stack/env/test/values.yaml
+#           outPath: ./out/manifests.yaml
+#
+#       # Commit image & Chart changes to the Git repository.
+#       - uses: git-commit
+#         as: chart-update
+#         config:
+#           path: ./src
+#           messageFromSteps:
+#           - update-chart
+#           - update-images
+#
+#       # Commit helm-template changes to the Git repository.
+#       - uses: git-commit
+#         as: commit
+#         config:
+#           path: ./out
+#           message: rendered updated manifests
+#
+#       # Push image & Chart changes to the Git repository.
+#       - uses: git-push
+#         config:
+#           path: ./src
+#
+#       # Push the helm-template to the Git repository.
+#       - uses: git-push
+#         config:
+#           path: ./out
+#
+#       - uses: argocd-update
+#         config:
+#           apps:
+#           - name: kube-prometheus-stack-test
+#             sources:
+#             - repoURL: https://github.com/34fathombelow/kargo-helm-prom-stack.git
+#               desiredCommitFromStep: commit
+#
+#   verification:
+#     analysisTemplates:
+#     - name: prometheus-is-up
+#
+# ---
+# apiVersion: kargo.akuity.io/v1alpha1
+# kind: Stage
+# metadata:
+#   name: prod
+#   namespace: kargo-helm-prom-stack
+#   annotations:
+#     kargo.akuity.io/color: green
+#     argocd.argoproj.io/sync-wave: "2"
+# spec:
+#   shard: prod
+#   requestedFreight:
+#   - origin:
+#       kind: Warehouse
+#       name: kube-prometheus-stack
+#     sources:
+#       stages:
+#       - test
+#   - origin:
+#       kind: Warehouse
+#       name: grafana
+#     sources:
+#       stages:
+#       - test
+#   - origin:
+#       kind: Warehouse
+#       name: alertmanager
+#     sources:
+#       stages:
+#       - test
+#   - origin:
+#       kind: Warehouse
+#       name: prometheus
+#     sources:
+#       stages:
+#       - test
+#   promotionTemplate:
+#     spec:
+#       steps:
+#       - uses: git-clone
+#         config:
+#           repoURL: https://github.com/34fathombelow/kargo-helm-prom-stack.git
+#           checkout:
+#           - branch: main
+#             path: ./src
+#           - branch: env/prod
+#             create: true
+#             path: ./out
+#
+#       - uses: git-clear
+#         config:
+#           path: ./out
+#
+#       - uses: kustomize-build
+#         config:
+#           path: ./src/addons
+#           outPath: ./out/addons.yaml
+#
+#       - uses: helm-update-chart
+#         as: update-chart
+#         config:
+#           path: ./src/kube-prometheus-stack/env/prod
+#           charts:
+#           - name: kube-prometheus-stack
+#             repository: https://prometheus-community.github.io/helm-charts
+#             fromOrigin:
+#               kind: Warehouse
+#               name: kube-prometheus-stack
+#
+#       - uses: helm-update-image
+#         as: update-images
+#         config:
+#           path: ./src/kube-prometheus-stack/env/prod/values.yaml
+#           images:
+#           - image: docker.io/grafana/grafana
+#             key: kube-prometheus-stack.grafana.image.tag
+#             value: Tag
+#             fromOrigin:
+#               kind: Warehouse
+#               name: grafana
+#           - image: quay.io/prometheus/alertmanager
+#             key: kube-prometheus-stack.alertmanager.alertmanagerSpec.image.tag
+#             value: Tag
+#             fromOrigin:
+#               kind: Warehouse
+#               name: alertmanager
+#           - image: quay.io/prometheus/prometheus
+#             key: kube-prometheus-stack.prometheus.prometheusSpec.image.tag
+#             value: Tag
+#             fromOrigin:
+#               kind: Warehouse
+#               name: prometheus
+#
+#       - uses: helm-template
+#         config:
+#           path: ./src/kube-prometheus-stack/env/prod
+#           releaseName: kube-prometheus-stack
+#           namespace: monitoring
+#           includeCRDs: true
+#           valuesFiles:
+#           - ./src/kube-prometheus-stack/env/prod/values.yaml
+#           outPath: ./out/manifests.yaml
+#
+#       # Commit image & Chart changes to the Git repository.
+#       - uses: git-commit
+#         as: chart-update
+#         config:
+#           path: ./src
+#           messageFromSteps:
+#           - update-chart
+#           - update-images
+#
+#       # Commit helm-template changes to the Git repository.
+#       - uses: git-commit
+#         as: commit
+#         config:
+#           path: ./out
+#           message: rendered updated manifests
+#
+#       # Push image & Chart changes to the Git repository.
+#       - uses: git-push
+#         config:
+#           path: ./src
+#
+#       # Push the helm-template to the Git repository.
+#       - uses: git-push
+#         config:
+#           path: ./out
+#
+#       - uses: argocd-update
+#         config:
+#           apps:
+#           - name: kube-prometheus-stack-prod
+#             sources:
+#             - repoURL: https://github.com/34fathombelow/kargo-helm-prom-stack.git
+#               desiredCommitFromStep: commit
+#
+#   verification:
+#     analysisTemplates:
+#     - name: prometheus-is-up
+#
