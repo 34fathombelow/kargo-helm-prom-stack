@@ -7,7 +7,7 @@ metadata:
     kargo.akuity.io/color: red
     argocd.argoproj.io/sync-wave: "2"
 spec:
-  #shard: default # change to dev after testing
+  #shard: dev # change to dev after testing
   requestedFreight:
   - origin:
       kind: Warehouse
@@ -71,7 +71,7 @@ spec:
           charts:
           - name: ${{ vars.chartName }}
             repository: ${{ vars.chartRepo }}
-            version: ${{ chartFrom(vars.chartRepo, "kube-prometheus-stack", warehouse(vars.chartName)).Version }}
+            version: ${{ chartFrom(vars.chartRepo, quote(vars.chartName), warehouse(vars.chartName)).Version }}
       - uses: yaml-update
         as: update-images
         config:
