@@ -8,6 +8,7 @@ spec:
     automated: {}
   source:
     repoURL: https://github.com/34fathombelow/kargo-helm-prom-stack.git
+    targetRevision: expression_lang
     path: argocd
     directory:
       recurse: true

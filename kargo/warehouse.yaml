@@ -10,7 +10,7 @@ spec:
   interval: 5m0s
   subscriptions:
     - chart:
-        discoveryLimit: 20
+        discoveryLimit: 30
         name: kube-prometheus-stack
         repoURL: https://prometheus-community.github.io/helm-charts
         semverConstraint: ">=62.0.0"
