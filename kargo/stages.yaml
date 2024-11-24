@@ -71,7 +71,7 @@ spec:
           charts:
           - name: ${{ vars.chartName }}
             repository: ${{ vars.chartRepo }}
-            version: ${{ chartFrom(vars.chartRepo, warehouse(vars.chartName)).Version }}
+            version: ${{ chartFrom(vars.chartRepo, "kube-prometheus-stack", warehouse(vars.chartName)).Version }}
       - uses: yaml-update
         as: update-images
         config:
