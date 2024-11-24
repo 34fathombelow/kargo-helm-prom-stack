@@ -4,7 +4,7 @@ kube-prometheus-stack:
       image:
         tag: v0.26.0
     ingress:
-      enabled: true
+      enabled: false
       hosts:
         - alertmanager-dev.localhost
       paths:
@@ -18,7 +18,7 @@ kube-prometheus-stack:
         enabled: true
         labelValue: ""
     ingress:
-      enabled: true
+      enabled: false
       hosts:
         - grafana-dev.localhost
       paths:
@@ -28,7 +28,7 @@ kube-prometheus-stack:
       image:
         tag: v2.55.0
     ingress:
-      enabled: true
+      enabled: false
       hosts:
         - prometheus-dev.localhost
       paths:
