@@ -13,7 +13,6 @@ spec:
         discoveryLimit: 5
         name: kube-prometheus-stack
         repoURL: https://prometheus-community.github.io/helm-charts
-        semverConstraint: ">=75.0.0"
 
 ---
 apiVersion: kargo.akuity.io/v1alpha1
@@ -31,7 +30,6 @@ spec:
         discoveryLimit: 5
         repoURL: docker.io/grafana/grafana
         imageSelectionStrategy: SemVer
-        semverConstraint: ">=12.0.0"
         strictSemvers: true
 
 ---
@@ -50,7 +48,6 @@ spec:
       discoveryLimit: 5
       repoURL: quay.io/prometheus/alertmanager
       imageSelectionStrategy: SemVer
-      semverConstraint: ">=0.28.0"
       strictSemvers: true
 
 ---
@@ -69,5 +66,4 @@ spec:
       discoveryLimit: 5
       repoURL: quay.io/prometheus/prometheus
       imageSelectionStrategy: SemVer
-      semverConstraint: ">=3.4.0"
       strictSemvers: true
