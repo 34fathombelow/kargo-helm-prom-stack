@@ -2,7 +2,7 @@ kube-prometheus-stack:
   alertmanager:
     alertmanagerSpec:
       image:
-        tag: v0.30.0
+        tag: v0.31.1
     ingress:
       enabled: true
       hosts:
