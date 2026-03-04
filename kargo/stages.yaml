@@ -55,7 +55,6 @@ spec:
           - name: ${{ vars.chartName }}-${{ ctx.stage }}
             sources:
             - repoURL: ${{ vars.gitRepo }}
-              desiredRevision: ${{ outputs.promotion.commit }}
 
   verification:
     analysisTemplates:
