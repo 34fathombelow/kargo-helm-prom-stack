@@ -103,16 +103,6 @@ spec:
       - task:
           name: default-promote
         as: promotion
-      # Update Argo CD application
-      - uses: argocd-update
-      #  retry:
-      #    errorThreshold: 5
-        config:
-          apps:
-          - name: ${{ vars.chartName }}-${{ ctx.stage }}
-            sources:
-            - repoURL: ${{ vars.gitRepo }}
-
   verification:
     analysisTemplates:
     - name: prometheus-is-up
@@ -170,16 +160,6 @@ spec:
       - task:
           name: default-promote
         as: promotion
-      # Update Argo CD application
-      - uses: argocd-update
-       # retry:
-       #   errorThreshold: 5
-        config:
-          apps:
-          - name: ${{ vars.chartName }}-${{ ctx.stage }}
-            sources:
-            - repoURL: ${{ vars.gitRepo }}
-
   verification:
     analysisTemplates:
     - name: prometheus-is-up
