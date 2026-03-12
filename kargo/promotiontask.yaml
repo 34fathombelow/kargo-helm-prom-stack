@@ -77,7 +77,12 @@ spec:
   - uses: git-push
     config:
       path: ./out
-  - uses: compose-output
-    as: output
+  # Update Argo CD application
+  - uses: argocd-update
+   # retry:
+   #   errorThreshold: 5
     config:
-      commit: ${{ task.outputs.commit.commit }}
+      apps:
+      - name: ${{ vars.chartName }}-${{ ctx.stage }}
+        sources:
+        - repoURL: ${{ vars.gitRepo }}
