@@ -36,7 +36,7 @@ kube-prometheus-stack:
   prometheus:
     prometheusSpec:
       image:
-        tag: v3.11.0-rc.0-busybox
+        tag: v3.11.0-rc.0-distroless
     ingress:
       enabled: true
       hosts:
