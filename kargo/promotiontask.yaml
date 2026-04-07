@@ -80,7 +80,7 @@ spec:
   # Update Argo CD application
   - uses: argocd-update
     retry:
-      errorThreshold: 5
+      errorThreshold: 1
     config:
       apps:
       - name: ${{ vars.chartName }}-${{ ctx.stage }}
