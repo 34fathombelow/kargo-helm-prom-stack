@@ -5,6 +5,8 @@ kind: Application
 metadata:
   annotations:
     kargo.akuity.io/authorized-stage: kargo-helm-prom-stack:dev
+  labels:
+    appset: auto-generated
   name: kube-prometheus-stack-dev
 spec:
   destination:
@@ -28,6 +30,8 @@ kind: Application
 metadata:
   annotations:
     kargo.akuity.io/authorized-stage: kargo-helm-prom-stack:prod
+  labels:
+    appset: auto-generated
   name: kube-prometheus-stack-prod
 spec:
   destination:
@@ -51,6 +55,8 @@ kind: Application
 metadata:
   annotations:
     kargo.akuity.io/authorized-stage: kargo-helm-prom-stack:test
+  labels:
+    appset: auto-generated
   name: kube-prometheus-stack-test
 spec:
   destination:
