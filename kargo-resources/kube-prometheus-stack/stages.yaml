@@ -16,17 +16,7 @@ spec:
       direct: true
   - origin:
       kind: Warehouse
-      name: grafana
-    sources:
-      direct: true
-  - origin:
-      kind: Warehouse
-      name: alertmanager
-    sources:
-      direct: true
-  - origin:
-      kind: Warehouse
-      name: prometheus
+      name: non-operator-images
     sources:
       direct: true
   promotionTemplate:
@@ -70,19 +60,7 @@ spec:
       - dev
   - origin:
       kind: Warehouse
-      name: grafana
-    sources:
-      stages:
-      - dev
-  - origin:
-      kind: Warehouse
-      name: alertmanager
-    sources:
-      stages:
-      - dev
-  - origin:
-      kind: Warehouse
-      name: prometheus
+      name: non-operator-images
     sources:
       stages:
       - dev
@@ -127,19 +105,7 @@ spec:
       - test
   - origin:
       kind: Warehouse
-      name: grafana
-    sources:
-      stages:
-      - test
-  - origin:
-      kind: Warehouse
-      name: alertmanager
-    sources:
-      stages:
-      - test
-  - origin:
-      kind: Warehouse
-      name: prometheus
+      name: non-operator-images
     sources:
       stages:
       - test

@@ -41,11 +41,11 @@ spec:
       path: ${{ vars.helmSrc }}/values.yaml
       updates:
       - key: ${{ vars.chartName }}.grafana.image.tag
-        value: ${{ imageFrom("docker.io/grafana/grafana", warehouse("grafana")).Tag }}
+        value: ${{ imageFrom("docker.io/grafana/grafana", warehouse("non-operator-images")).Tag }}
       - key: ${{ vars.chartName }}.alertmanager.alertmanagerSpec.image.tag
-        value: ${{ imageFrom("quay.io/prometheus/alertmanager", warehouse("alertmanager")).Tag }}
+        value: ${{ imageFrom("quay.io/prometheus/alertmanager", warehouse("non-operator-images")).Tag }}
       - key: ${{ vars.chartName }}.prometheus.prometheusSpec.image.tag
-        value: ${{ imageFrom("quay.io/prometheus/prometheus", warehouse("prometheus")).Tag }}
+        value: ${{ imageFrom("quay.io/prometheus/prometheus", warehouse("non-operator-images")).Tag }}
   - uses: helm-template
     config:
       path: ${{ vars.helmSrc }}
