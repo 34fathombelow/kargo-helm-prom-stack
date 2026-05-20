@@ -1,66 +1,66 @@
-- apiVersion: argoproj.io/v1alpha1
-  kind: Application
-  metadata:
-    annotations:
-      kargo.akuity.io/authorized-stage: kargo-helm-prom-stack:dev
-    name: kube-prometheus-stack-dev
-  spec:
-    destination:
-      name: dev
-      namespace: monitoring
-    project: kargo-helm
-    source:
-      path: .
-      repoURL: https://github.com/34fathombelow/kargo-helm-prom-stack.git
-      targetRevision: env/dev
-    syncPolicy:
-      automated:
-        prune: true
-        selfHeal: true
-      syncOptions:
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  annotations:
+    kargo.akuity.io/authorized-stage: kargo-helm-prom-stack:dev
+  name: kube-prometheus-stack-dev
+spec:
+  destination:
+    name: dev
+    namespace: monitoring
+  project: kargo-helm
+  source:
+    path: .
+    repoURL: https://github.com/34fathombelow/kargo-helm-prom-stack.git
+    targetRevision: env/dev
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
       - CreateNamespace=true
       - ServerSideApply=true
-- apiVersion: argoproj.io/v1alpha1
-  kind: Application
-  metadata:
-    annotations:
-      kargo.akuity.io/authorized-stage: kargo-helm-prom-stack:prod
-    name: kube-prometheus-stack-prod
-  spec:
-    destination:
-      name: prod
-      namespace: monitoring
-    project: kargo-helm
-    source:
-      path: .
-      repoURL: https://github.com/34fathombelow/kargo-helm-prom-stack.git
-      targetRevision: env/prod
-    syncPolicy:
-      automated:
-        prune: true
-        selfHeal: true
-      syncOptions:
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  annotations:
+    kargo.akuity.io/authorized-stage: kargo-helm-prom-stack:prod
+  name: kube-prometheus-stack-prod
+spec:
+  destination:
+    name: prod
+    namespace: monitoring
+  project: kargo-helm
+  source:
+    path: .
+    repoURL: https://github.com/34fathombelow/kargo-helm-prom-stack.git
+    targetRevision: env/prod
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
       - CreateNamespace=true
       - ServerSideApply=true
-- apiVersion: argoproj.io/v1alpha1
-  kind: Application
-  metadata:
-    annotations:
-      kargo.akuity.io/authorized-stage: kargo-helm-prom-stack:test
-    name: kube-prometheus-stack-test
-  spec:
-    destination:
-      name: test
-      namespace: monitoring
-    project: kargo-helm
-    source:
-      path: .
-      repoURL: https://github.com/34fathombelow/kargo-helm-prom-stack.git
-      targetRevision: env/test
-    syncPolicy:
-      automated:
-        prune: true
-        selfHeal: true
-      syncOptions:
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  annotations:
+    kargo.akuity.io/authorized-stage: kargo-helm-prom-stack:test
+  name: kube-prometheus-stack-test
+spec:
+  destination:
+    name: test
+    namespace: monitoring
+  project: kargo-helm
+  source:
+    path: .
+    repoURL: https://github.com/34fathombelow/kargo-helm-prom-stack.git
+    targetRevision: env/test
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
       - CreateNamespace=true
       - ServerSideApply=true
