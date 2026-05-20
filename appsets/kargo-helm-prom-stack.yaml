@@ -23,7 +23,7 @@ spec:
       destination:
         namespace: monitoring
         name: '{{path.basename}}'
-      project: kargo-helm
+      project: kargo-addons
       source:
         repoURL: https://github.com/34fathombelow/kargo-helm-prom-stack.git
         targetRevision: 'env/{{path.basename}}'
