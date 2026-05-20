@@ -1,6 +1,4 @@
-# Generated with:
-# argocd appset generate appset.yaml -o yaml --grpc-web --auth-token $TOKEN | yq '.[]' - \
-#  | sed 's/^apiVersion/---\napiVersion/' > argocd/apps.yaml
+# Generated with: ./generate-apps.sh
 apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:
