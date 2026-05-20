@@ -20,7 +20,7 @@ spec:
     - description: Role used for AppSet generation
       name: appset-generate
       policies:
-        - p, proj:kargo-addons:appset, applications, get, kargo-addons/*, allow
-        - p, proj:kargo-addons:appset, applicationsets, *, kargo-addons/*, allow
-        - p, proj:kargo-addons:appset, clusters, get, kargo-addons/*, allow
-        - p, proj:kargo-addons:appset, repositories, get, kargo-addons/*, allow
+        - p, proj:kargo-addons:appset-generate, applications, get, kargo-addons/*, allow
+        - p, proj:kargo-addons:appset-generate, applicationsets, *, kargo-addons/*, allow
+        - p, proj:kargo-addons:appset-generate, clusters, get, kargo-addons/*, allow
+        - p, proj:kargo-addons:appset-generate, repositories, get, kargo-addons/*, allow
