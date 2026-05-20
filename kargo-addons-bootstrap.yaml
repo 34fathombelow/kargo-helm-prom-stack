@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: kargo-helm-prom-stack-bootstrap
+  name: kargo-addons-bootstrap
 spec:
   project: default
   syncPolicy:
