@@ -28,6 +28,7 @@ jobs:
 
       - name: Generate apps
         env:
+          ARGOCD_SERVER: ${{ secrets.ARGOCD_SERVER }}
           TOKEN: ${{ secrets.ARGOCD_TOKEN }}
         run: ./generate-apps.sh
 
