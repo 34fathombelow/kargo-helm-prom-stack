@@ -1,6 +1,9 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+echo "ArgoCD client version: $(argocd version --client --short)"
+echo ""
+
 for f in appsets/*.yaml; do
   name=$(basename "$f" .yaml)
   echo "Generating argocd/${name}.yaml from $f"
@@ -8,4 +11,9 @@ for f in appsets/*.yaml; do
   argocd appset generate "$f" -o yaml --grpc-web --server "$ARGOCD_SERVER" --auth-token "$TOKEN" \
     | yq '.[]' - \
     | sed 's/^apiVersion/---\napiVersion/' >> "argocd/${name}.yaml"
+  count=$(grep -c '^kind: Application' "argocd/${name}.yaml" || true)
+  echo "  -> ${count} Application(s) written to argocd/${name}.yaml"
 done
+
+echo ""
+echo "Done."

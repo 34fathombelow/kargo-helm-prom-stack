@@ -17,6 +17,8 @@ spec:
   template:
     metadata:
       name: 'kube-prometheus-stack-{{path.basename}}'
+      labels:
+        appset: auto-generated
       annotations:
         kargo.akuity.io/authorized-stage: 'kargo-helm-prom-stack:{{path.basename}}'
     spec:
