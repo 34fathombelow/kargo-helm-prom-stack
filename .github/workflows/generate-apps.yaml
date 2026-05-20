@@ -1,0 +1,39 @@
+name: Generate ArgoCD Apps
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - appsets/*.yaml
+  workflow_dispatch:
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install argocd CLI
+        run: |
+          curl -sSL -o /usr/local/bin/argocd \
+            https://github.com/argoproj/argo-cd/releases/download/stable/argocd-linux-amd64
+          chmod +x /usr/local/bin/argocd
+
+      - name: Install yq
+        run: |
+          curl -sSL -o /usr/local/bin/yq \
+            https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64
+          chmod +x /usr/local/bin/yq
+
+      - name: Generate apps
+        env:
+          TOKEN: ${{ secrets.ARGOCD_TOKEN }}
+        run: ./generate-apps.sh
+
+      - uses: peter-evans/create-pull-request@v6
+        with:
+          commit-message: "chore: regenerate argocd apps from appsets"
+          title: "chore: regenerate argocd apps"
+          branch: auto/generate-apps
+          delete-branch: true
