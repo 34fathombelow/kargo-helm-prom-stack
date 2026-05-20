@@ -16,3 +16,14 @@ spec:
     kind: '*'
   sourceRepos:
   - '*'
+  roles:
+    - description: Role used for AppSet generation
+      jwtTokens:
+        - iat: 1779251277
+          id: 5f5560e1-3ee2-4f7f-8efe-766b701a37f9
+      name: appset
+      policies:
+        - p, proj:kargo-helm:appset, applications, get, kargo-addons/*, allow
+        - p, proj:kargo-helm:appset, applicationsets, *, kargo-addons/*, allow
+        - p, proj:kargo-helm:appset, clusters, get, kargo-addons/*, allow
+        - p, proj:kargo-helm:appset, repositories, get, kargo-addons/*, allow
