@@ -25,7 +25,7 @@ spec:
       path: ./out
   - uses: kustomize-build
     config:
-      path: ./src/addons
+      path: ./src/addons/${{ vars.chartName }}/extras
       outPath: ./out/addons.yaml
   - uses: helm-update-chart
     as: update-chart
