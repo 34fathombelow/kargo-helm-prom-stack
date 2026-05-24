@@ -19,6 +19,11 @@ spec:
       name: non-operator-images
     sources:
       direct: true
+  - origin:
+      kind: Warehouse
+      name: addon-extras
+    sources:
+      direct: true
   promotionTemplate:
     spec:
       vars:
@@ -61,6 +66,12 @@ spec:
   - origin:
       kind: Warehouse
       name: non-operator-images
+    sources:
+      stages:
+      - dev
+  - origin:
+      kind: Warehouse
+      name: addon-extras
     sources:
       stages:
       - dev
@@ -109,6 +120,12 @@ spec:
     sources:
       stages:
       - test
+  - origin:
+      kind: Warehouse
+      name: addon-extras
+    sources:
+      stages:
+      - dev
   promotionTemplate:
     spec:
       vars:

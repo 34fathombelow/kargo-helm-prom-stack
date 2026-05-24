@@ -13,6 +13,18 @@ spec:
         discoveryLimit: 5
         name: kube-prometheus-stack
         repoURL: https://prometheus-community.github.io/helm-charts
+---
+apiVersion: kargo.akuity.io/v1alpha1
+kind: Warehouse
+metadata:
+  name: addon-extras
+  namespace: kargo-helm-prom-stack
+  annotations:
+    argocd.argoproj.io/sync-wave: "2"
+spec:
+  freightCreationPolicy: Automatic
+  interval: 5m0s
+  subscriptions:
     - git:
         branch: main
         commitSelectionStrategy: NewestFromBranch
