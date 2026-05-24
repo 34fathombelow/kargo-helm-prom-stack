@@ -18,6 +18,7 @@ A GitOps repository for deploying and continuously promoting [kube-prometheus-st
 - [AppSet Generation](#appset-generation)
 - [RBAC](#rbac)
 - [Environments](#environments)
+- [Forking This Repo](#forking-this-repo)
 
 ---
 
@@ -282,3 +283,47 @@ The `kargo-promote-non-prod` ServiceAccount (`kargo-resources/kube-prometheus-st
 | `prod` | `prod` | No (manual) | `*.prod.localhost` |
 
 Dev also includes a local Prometheus data source configured in Grafana pointing to `http://host.docker.internal:9090` for local development use.
+
+---
+
+## Forking This Repo
+
+A setup script is provided to replace all hardcoded repo URL references after forking.
+
+```bash
+./fork-setup.sh https://github.com/your-org/your-repo.git
+```
+
+This updates the repo URL in:
+- `appsets/kube-prometheus-stack.yaml`
+- `argocd/kube-prometheus-stack.yaml`
+- `kargo-resources/kube-prometheus-stack/stages.yaml`
+- `kargo-resources/kube-prometheus-stack/promotiontask.yaml`
+
+After running the script, complete the following manual steps:
+
+1. **Update cluster names** if your clusters are not named `dev`, `test`, `prod`:
+   - `appsets/kube-prometheus-stack.yaml` — `destination.name`
+   - `kargo-resources/kube-prometheus-stack/stages.yaml` — `shard`
+
+2. **Add GitHub Actions secrets** to your forked repo:
+   | Secret | Value |
+   |--------|-------|
+   | `ARGOCD_SERVER` | ArgoCD server hostname (no `https://`) |
+   | `ARGOCD_TOKEN` | ArgoCD API token with `appset-generate` role |
+
+3. **Commit and push** your changes:
+   ```bash
+   git add -A && git commit -m "chore: update repo URL for fork"
+   git push
+   ```
+
+4. **Bootstrap ArgoCD** by applying the bootstrap manifest once:
+   ```bash
+   kubectl apply -f kargo-addons-bootstrap.yaml
+   ```
+
+5. **Regenerate ArgoCD apps** (or let the GitHub Action handle it on push):
+   ```bash
+   ARGOCD_SERVER=<server> TOKEN=<token> ./generate-apps.sh
+   ```
