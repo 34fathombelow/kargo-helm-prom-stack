@@ -26,6 +26,10 @@ spec:
       direct: true
   promotionTemplate:
     spec:
+      steps:
+      - task:
+          name: default-promote
+        as: promotion
       vars:
       - name: gitRepo
         value: https://github.com/34fathombelow/kargo-helm-prom-stack.git
@@ -37,10 +41,7 @@ spec:
         value: ./src/addons/kube-prometheus-stack/env/${{ ctx.stage }}
       - name: targetBranch
         value: addon/kube-prometheus.stack/env/${{ ctx.stage }}
-      steps:
-      - task:
-          name: default-promote
-        as: promotion
+
   verification:
     analysisTemplates:
     - name: prometheus-is-up
@@ -77,6 +78,10 @@ spec:
       - dev
   promotionTemplate:
     spec:
+      steps:
+      - task:
+          name: default-promote
+        as: promotion
       vars:
       - name: gitRepo
         value: https://github.com/34fathombelow/kargo-helm-prom-stack.git
@@ -88,10 +93,7 @@ spec:
         value: ./src/addons/kube-prometheus-stack/env/${{ ctx.stage }}
       - name: targetBranch
         value: addon/kube-prometheus.stack/env/${{ ctx.stage }}
-      steps:
-      - task:
-          name: default-promote
-        as: promotion
+
   verification:
     analysisTemplates:
     - name: prometheus-is-up
@@ -128,6 +130,10 @@ spec:
       - test
   promotionTemplate:
     spec:
+      steps:
+      - task:
+          name: default-promote
+        as: promotion
       vars:
       - name: gitRepo
         value: https://github.com/34fathombelow/kargo-helm-prom-stack.git
@@ -139,10 +145,7 @@ spec:
         value: ./src/addons/kube-prometheus-stack/env/${{ ctx.stage }}
       - name: targetBranch
         value: addon/kube-prometheus.stack/env/${{ ctx.stage }}
-      steps:
-      - task:
-          name: default-promote
-        as: promotion
+
   verification:
     analysisTemplates:
     - name: prometheus-is-up
