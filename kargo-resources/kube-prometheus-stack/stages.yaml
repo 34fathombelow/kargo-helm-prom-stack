@@ -31,7 +31,7 @@ spec:
       - name: helmSrc
         value: ./src/addons/kube-prometheus-stack/env/${{ ctx.stage }}
       - name: targetBranch
-        value: env/${{ ctx.stage }}
+        value: addon/kube-prometheus.stack/env/${{ ctx.stage }}
       steps:
       - task:
           name: default-promote
@@ -76,7 +76,7 @@ spec:
       - name: helmSrc
         value: ./src/addons/kube-prometheus-stack/env/${{ ctx.stage }}
       - name: targetBranch
-        value: env/${{ ctx.stage }}
+        value: addon/kube-prometheus.stack/env/${{ ctx.stage }}
       steps:
       - task:
           name: default-promote
@@ -121,7 +121,7 @@ spec:
       - name: helmSrc
         value: ./src/addons/kube-prometheus-stack/env/${{ ctx.stage }}
       - name: targetBranch
-        value: env/${{ ctx.stage }}
+        value: addon/kube-prometheus.stack/env/${{ ctx.stage }}
       steps:
       - task:
           name: default-promote
