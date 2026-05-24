@@ -1,49 +1,48 @@
-kube-prometheus-stack:
-  alertmanager:
-    alertmanagerSpec:
-      image:
-        tag: v0.32.1
-    ingress:
-      enabled: true
-      hosts:
-        - alertmanager-dev.localhost
-      paths:
-        - /
-  grafana:
+alertmanager:
+  alertmanagerSpec:
     image:
-      tag: 13.0.1
-    adminPassword: admin
-    sidecar:
-      dashboards:
-        enabled: true
-        labelValue: ""
-    additionalDataSources:
-     - name: prometheus-local
-       type: prometheus
-       uid: prometheus-local
-       url: http://host.docker.internal:9090
-       access: proxy
-       isDefault: false
-       jsonData:
-         httpMethod: POST
-         timeInterval: 15s
-    ingress:
+      tag: v0.32.1
+  ingress:
+    enabled: true
+    hosts:
+      - alertmanager-dev.localhost
+    paths:
+      - /
+grafana:
+  image:
+    tag: 13.0.1
+  adminPassword: admin
+  sidecar:
+    dashboards:
       enabled: true
-      hosts:
-        - grafana-dev.localhost
-      paths:
-        - /
+      labelValue: ""
+  additionalDataSources:
+   - name: prometheus-local
+     type: prometheus
+     uid: prometheus-local
+     url: http://host.docker.internal:9090
+     access: proxy
+     isDefault: false
+     jsonData:
+       httpMethod: POST
+       timeInterval: 15s
+  ingress:
+    enabled: true
+    hosts:
+      - grafana-dev.localhost
+    paths:
+      - /
+prometheus:
+  prometheusSpec:
+    image:
+      tag: v3.11.3
+  ingress:
+    enabled: true
+    hosts:
+      - prometheus-dev.localhost
+    paths:
+      - /
+prometheus-node-exporter:
   prometheus:
-    prometheusSpec:
-      image:
-        tag: v3.11.3
-    ingress:
-      enabled: true
-      hosts:
-        - prometheus-dev.localhost
-      paths:
-        - /
-  prometheus-node-exporter:
-    prometheus:
-      monitor:
-        interval: 15s
+    monitor:
+      interval: 15s

@@ -23,18 +23,6 @@ spec:
   - uses: git-clear
     config:
       path: ./out
-  #- uses: kustomize-build
-  #  config:
-  #    path: ./src/addons/${{ vars.chartName }}/extras
-  #    outPath: ./out/addons.yaml
-  #- uses: helm-update-chart
-  #  as: update-chart
-  #  config:
-  #    path: ${{ vars.helmSrc }}
-  #    charts:
-  #    - name: ${{ vars.chartName }}
-  #      repository: ${{ vars.chartRepo }}
-  #      version: ${{ chartFrom(vars.chartRepo, vars.chartName, warehouse(vars.chartName)).Version }}
   - uses: yaml-update
     as: update-kustomize
     config:
@@ -47,25 +35,16 @@ spec:
     config:
       path: ${{ vars.helmSrc }}/values.yaml
       updates:
-      - key: ${{ vars.chartName }}.grafana.image.tag
+      - key: grafana.image.tag
         value: ${{ imageFrom("docker.io/grafana/grafana", warehouse("non-operator-images")).Tag }}
-      - key: ${{ vars.chartName }}.alertmanager.alertmanagerSpec.image.tag
+      - key: alertmanager.alertmanagerSpec.image.tag
         value: ${{ imageFrom("quay.io/prometheus/alertmanager", warehouse("non-operator-images")).Tag }}
-      - key: ${{ vars.chartName }}.prometheus.prometheusSpec.image.tag
+      - key: prometheus.prometheusSpec.image.tag
         value: ${{ imageFrom("quay.io/prometheus/prometheus", warehouse("non-operator-images")).Tag }}
   - uses: kustomize-build
     config:
       path: ${{ vars.helmSrc }}
       outPath: ./out/manifest.yaml
-  #- uses: helm-template
-  #  config:
-  #    path: ${{ vars.helmSrc }}
-  #    releaseName: ${{ vars.chartName }}
-  #    namespace: monitoring
-  #    includeCRDs: true
-  #    valuesFiles:
-  #    - ${{ vars.helmSrc }}/values.yaml
-  #    outPath: ./out/manifests.yaml
   # Commit image & Chart changes to the Git repository.
   - uses: git-commit
     as: image-update
