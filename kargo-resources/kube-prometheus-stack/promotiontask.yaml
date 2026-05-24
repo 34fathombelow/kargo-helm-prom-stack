@@ -55,7 +55,7 @@ spec:
         value: ${{ imageFrom("quay.io/prometheus/prometheus", warehouse("non-operator-images")).Tag }}
   - uses: kustomize-build
     config:
-      path: .${{ vars.helmSrc }}
+      path: ${{ vars.helmSrc }}
       outPath: ./out/manifest.yaml
   #- uses: helm-template
   #  config:
