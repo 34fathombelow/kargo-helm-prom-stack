@@ -40,7 +40,7 @@ spec:
     config:
       path: ${{ vars.helmSrc }}/kustomization.yaml
       updates:
-      - key: "helmCharts[0].version"
+      - key: helmCharts.0.version
         value: ${{ chartFrom(vars.chartRepo, vars.chartName, warehouse(vars.chartName)).Version }}
   - uses: yaml-update
     as: update-images
