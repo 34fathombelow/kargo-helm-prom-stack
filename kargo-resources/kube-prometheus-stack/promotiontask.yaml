@@ -23,18 +23,25 @@ spec:
   - uses: git-clear
     config:
       path: ./out
-  - uses: kustomize-build
+  #- uses: kustomize-build
+  #  config:
+  #    path: ./src/addons/${{ vars.chartName }}/extras
+  #    outPath: ./out/addons.yaml
+  #- uses: helm-update-chart
+  #  as: update-chart
+  #  config:
+  #    path: ${{ vars.helmSrc }}
+  #    charts:
+  #    - name: ${{ vars.chartName }}
+  #      repository: ${{ vars.chartRepo }}
+  #      version: ${{ chartFrom(vars.chartRepo, vars.chartName, warehouse(vars.chartName)).Version }}
+  - uses: yaml-update
+    as: update-kustomize
     config:
-      path: ./src/addons/${{ vars.chartName }}/extras
-      outPath: ./out/addons.yaml
-  - uses: helm-update-chart
-    as: update-chart
-    config:
-      path: ${{ vars.helmSrc }}
-      charts:
-      - name: ${{ vars.chartName }}
-        repository: ${{ vars.chartRepo }}
-        version: ${{ chartFrom(vars.chartRepo, vars.chartName, warehouse(vars.chartName)).Version }}
+      path: ${{ vars.helmSrc }}/kustomization.yaml
+      updates:
+      - key: helmCharts[0].version
+        value: ${{ chartFrom(vars.chartRepo, vars.chartName, warehouse(vars.chartName)).Version }}
   - uses: yaml-update
     as: update-images
     config:
@@ -46,15 +53,19 @@ spec:
         value: ${{ imageFrom("quay.io/prometheus/alertmanager", warehouse("non-operator-images")).Tag }}
       - key: ${{ vars.chartName }}.prometheus.prometheusSpec.image.tag
         value: ${{ imageFrom("quay.io/prometheus/prometheus", warehouse("non-operator-images")).Tag }}
-  - uses: helm-template
+  - uses: kustomize-build
     config:
-      path: ${{ vars.helmSrc }}
-      releaseName: ${{ vars.chartName }}
-      namespace: monitoring
-      includeCRDs: true
-      valuesFiles:
-      - ${{ vars.helmSrc }}/values.yaml
-      outPath: ./out/manifests.yaml
+      path: .${{ vars.helmSrc }}
+      outPath: ./out/manifest.yaml
+  #- uses: helm-template
+  #  config:
+  #    path: ${{ vars.helmSrc }}
+  #    releaseName: ${{ vars.chartName }}
+  #    namespace: monitoring
+  #    includeCRDs: true
+  #    valuesFiles:
+  #    - ${{ vars.helmSrc }}/values.yaml
+  #    outPath: ./out/manifests.yaml
   # Commit image & Chart changes to the Git repository.
   - uses: git-commit
     as: image-update
@@ -62,7 +73,7 @@ spec:
       path: ./src
       message: |
         ${{ task.outputs['update-images'].commitMessage }}
-        ${{ task.outputs['update-chart'].commitMessage }}
+        ${{ task.outputs['update-kustomize'].commitMessage }}
   # Commit helm-template changes to the Git repository.
   - uses: git-commit
     as: commit
