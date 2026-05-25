@@ -38,9 +38,9 @@ spec:
       - name: chartRepo
         value: https://prometheus-community.github.io/helm-charts
       - name: helmSrc
-        value: ./src/addons/kube-prometheus-stack/env/${{ ctx.stage }}
+        value: ./src/addons/kube-prometheus-stack/stage/${{ ctx.stage }}
       - name: targetBranch
-        value: addon/kube-prometheus.stack/env/${{ ctx.stage }}
+        value: addon/kube-prometheus.stack/stage/${{ ctx.stage }}
 
   verification:
     analysisTemplates:
@@ -90,9 +90,9 @@ spec:
       - name: chartRepo
         value: https://prometheus-community.github.io/helm-charts
       - name: helmSrc
-        value: ./src/addons/kube-prometheus-stack/env/${{ ctx.stage }}
+        value: ./src/addons/kube-prometheus-stack/stage/${{ ctx.stage }}
       - name: targetBranch
-        value: addon/kube-prometheus.stack/env/${{ ctx.stage }}
+        value: addon/kube-prometheus.stack/stage/${{ ctx.stage }}
 
   verification:
     analysisTemplates:
@@ -127,7 +127,7 @@ spec:
       name: addon-extras
     sources:
       stages:
-      - test
+      - tests
   promotionTemplate:
     spec:
       steps:
@@ -142,9 +142,9 @@ spec:
       - name: chartRepo
         value: https://prometheus-community.github.io/helm-charts
       - name: helmSrc
-        value: ./src/addons/kube-prometheus-stack/env/${{ ctx.stage }}
+        value: ./src/addons/kube-prometheus-stack/stage/${{ ctx.stage }}
       - name: targetBranch
-        value: addon/kube-prometheus.stack/env/${{ ctx.stage }}
+        value: addon/kube-prometheus.stack/stage/${{ ctx.stage }}
 
   verification:
     analysisTemplates:

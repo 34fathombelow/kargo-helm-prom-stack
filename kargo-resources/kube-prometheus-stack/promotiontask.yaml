@@ -8,9 +8,11 @@ spec:
   - name: gitRepo
   - name: chartName
   - name: chartRepo
-  - name: helmSrc
-  - name: targetBranch
+  - name: helmSrc # path to the stage config dir inside ./src, e.g. ./src/addons/kube-prometheus-stack/stage/dev
+  - name: targetBranch # stage branch Kargo writes rendered manifests to, e.g. addon/kube-prometheus.stack/stage/dev
   steps:
+  # Two workspaces: ./src = main (version config), ./out = stage branch (rendered manifests)
+  # create: true ensures the stage branch is initialized on first promotion if it doesn't exist yet
   - uses: git-clone
     config:
       repoURL: ${{ vars.gitRepo }}
@@ -20,9 +22,11 @@ spec:
       - branch: ${{ vars.targetBranch }}
         create: true
         path: ./out
+  # Wipe ./out before rendering so stale files from prior promotions don't persist in the stage branch
   - uses: git-clear
     config:
       path: ./out
+  # Bump the chart version in kustomization.yaml
   - uses: yaml-update
     as: update-kustomize
     config:
@@ -30,6 +34,7 @@ spec:
       updates:
       - key: helmCharts.0.version
         value: ${{ chartFrom(vars.chartRepo, vars.chartName, warehouse(vars.chartName)).Version }}
+  # Bump image tags in values.yaml
   - uses: yaml-update
     as: update-images
     config:
@@ -41,11 +46,12 @@ spec:
         value: ${{ imageFrom("quay.io/prometheus/alertmanager", warehouse("non-operator-images")).Tag }}
       - key: prometheus.prometheusSpec.image.tag
         value: ${{ imageFrom("quay.io/prometheus/prometheus", warehouse("non-operator-images")).Tag }}
+  # Render the Helm chart + extras into a single manifest that ArgoCD will sync from the stage branch
   - uses: kustomize-build
     config:
       path: ${{ vars.helmSrc }}
       outPath: ./out/manifest.yaml
-  # Commit image & Chart changes to the Git repository.
+  # Commit version bumps to main
   - uses: git-commit
     as: image-update
     config:
@@ -53,7 +59,7 @@ spec:
       message: |
         ${{ task.outputs['update-images'].commitMessage }}
         ${{ task.outputs['update-kustomize'].commitMessage }}
-  # Commit helm-template changes to the Git repository.
+  # Commit rendered manifests to the stage branch — ArgoCD syncs from here
   - uses: git-commit
     as: commit
     config:
@@ -63,7 +69,7 @@ spec:
   - uses: git-push
     config:
       path: ./src
-  # Push the helm-template to the Git repository.
+  # Push the rendered manifest to git
   - uses: git-push
     config:
       path: ./out
