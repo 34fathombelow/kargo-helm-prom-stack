@@ -13,7 +13,7 @@ spec:
       repoURL: https://github.com/34fathombelow/kargo-helm-prom-stack.git
       revision: HEAD
       directories:
-      - path: addons/kube-prometheus-stack/env/*
+      - path: addons/kube-prometheus-stack/stage/*
   template:
     metadata:
       name: 'kube-prometheus-stack-{{path.basename}}'

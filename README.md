@@ -27,9 +27,9 @@ A GitOps repository for deploying and continuously promoting [kube-prometheus-st
 This repo manages a single addon (`kube-prometheus-stack`) across three environments: `dev`, `test`, and `prod`. It uses a two-branch GitOps pattern:
 
 - **`main`** — source of truth for configuration, Kargo resources, ArgoCD app definitions, and Helm values
-- **`addon/kube-prometheus.stack/env/<stage>`** — rendered output branches, one per environment; ArgoCD syncs from these
+- **`addon/kube-prometheus.stack/stage/<stage>`** — rendered output branches, one per environment; ArgoCD syncs from these
 
-When Kargo promotes a new chart version or image tag, it updates the `main` branch with the new versions and writes rendered Kustomize manifests to the corresponding env branch. ArgoCD picks up the env branch changes and reconciles the cluster.
+When Kargo promotes a new chart version or image tag, it updates the `main` branch with the new versions and writes rendered Kustomize manifests to the corresponding stage branch. ArgoCD picks up the stage branch changes and reconciles the cluster.
 
 ---
 
@@ -37,7 +37,7 @@ When Kargo promotes a new chart version or image tag, it updates the `main` bran
 
 | Tool | Role |
 |------|------|
-| [Argo CD](https://argo-cd.readthedocs.io) | Continuous reconciliation — syncs rendered manifests from env branches to clusters |
+| [Argo CD](https://argo-cd.readthedocs.io) | Continuous reconciliation — syncs rendered manifests from stage branches to clusters |
 | [Kargo](https://kargo.akuity.io) | Continuous promotion — promotes chart versions and image tags across stages |
 | [Kustomize](https://kustomize.io) | Renders Helm charts via `helmCharts` and bundles extras (ServiceMonitors, dashboards) |
 | [kube-prometheus-stack](https://github.com/prometheus-community/helm-charts) | The Helm chart being deployed (Prometheus, Grafana, Alertmanager) |
@@ -53,7 +53,7 @@ kargo-helm-prom-stack/
 │
 ├── addons/                         # Addon source — one subdirectory per addon
 │   └── kube-prometheus-stack/
-│       ├── env/                    # Per-environment Helm + Kustomize config (main branch)
+│       ├── stage/                  # Per-environment Helm + Kustomize config (main branch)
 │       │   ├── .gitignore          # Ignores charts/ and Chart.lock
 │       │   ├── dev/
 │       │   │   ├── kustomization.yaml   # Helm chart version + extras reference
@@ -80,7 +80,7 @@ kargo-helm-prom-stack/
 ├── kargo-resources/                # Kargo resource definitions (one subdirectory per addon)
 │   └── kube-prometheus-stack/
 │       ├── project.yaml            # Kargo Project + auto-promotion policies
-│       ├── warehouse.yaml          # Warehouses: chart version + non-operator images
+│       ├── warehouse.yaml          # Warehouses: chart version, non-operator images, extras
 │       ├── stages.yaml             # dev → test → prod stage definitions
 │       ├── promotiontask.yaml      # Reusable promotion steps
 │       ├── promoteRole.yaml        # RBAC for non-prod promotions
@@ -94,18 +94,18 @@ kargo-helm-prom-stack/
 
 ## Branch Strategy
 
-This repo uses **per-addon env branches** to separate rendered output from source config:
+This repo uses **per-addon stage branches** to separate rendered output from source config:
 
 | Branch | Purpose |
 |--------|---------|
 | `main` | All source config: values, kustomizations, Kargo resources, ArgoCD definitions |
-| `addon/kube-prometheus.stack/env/dev` | Rendered manifests for dev — ArgoCD syncs this |
-| `addon/kube-prometheus.stack/env/test` | Rendered manifests for test — ArgoCD syncs this |
-| `addon/kube-prometheus.stack/env/prod` | Rendered manifests for prod — ArgoCD syncs this |
+| `addon/kube-prometheus.stack/stage/dev` | Rendered manifests for dev — ArgoCD syncs this |
+| `addon/kube-prometheus.stack/stage/test` | Rendered manifests for test — ArgoCD syncs this |
+| `addon/kube-prometheus.stack/stage/prod` | Rendered manifests for prod — ArgoCD syncs this |
 
-The env branches contain only the Kustomize-rendered output (`manifest.yaml` and `addons.yaml`). They are written exclusively by Kargo promotions and should never be edited manually.
+Stage branches contain only the Kustomize-rendered output (`manifest.yaml`). They are written exclusively by Kargo promotions and should never be edited manually.
 
-The naming convention `addon/<addon-name>/env/<stage>` namespaces branches by addon, preventing collisions as more addons are added.
+The naming convention `addon/<addon-name>/stage/<stage>` namespaces branches by addon, preventing collisions as more addons are added.
 
 ---
 
@@ -136,26 +136,29 @@ ArgoCD applications are defined in `argocd/` and managed in two ways:
 Each generated Application:
 - Targets a specific cluster by environment name (`dev`, `test`, `prod`)
 - Deploys to the `monitoring` namespace
-- Syncs from the addon's env branch (`addon/kube-prometheus.stack/env/<stage>`)
+- Syncs from the addon's stage branch (`addon/kube-prometheus.stack/stage/<stage>`)
 - Uses `ServerSideApply` and `automated` sync with pruning
 
 ### Kargo Pipeline
 
-Kargo watches for new chart versions and image tags, then promotes them through stages automatically (dev/test) or with a manual gate (prod).
+Kargo watches for new chart versions, image tags, and extras changes, then promotes them through stages automatically (dev/test) or with a manual gate (prod).
 
 #### Warehouses
 
-Two warehouses poll for new versions every 5 minutes:
+Three warehouses poll for new versions every 5 minutes:
 
 | Warehouse | Tracks |
 |-----------|--------|
 | `kube-prometheus-stack` | Helm chart from `https://prometheus-community.github.io/helm-charts` |
 | `non-operator-images` | Container images: Prometheus, Grafana, Alertmanager |
+| `addon-extras` | Git commits to `addons/kube-prometheus-stack/extras/` on `main` |
 
 Image selection uses `SemVer` strategy with `strictSemvers: true` to avoid pre-release tags. Tag regexes are applied per image:
 - Prometheus: `^v[0-9]+\.[0-9]+\.[0-9]+$`
 - Grafana: `^[0-9]+\.[0-9]+\.[0-9]+$`
 - Alertmanager: `^v[0-9]+\.[0-9]+\.[0-9]+$`
+
+The `addon-extras` warehouse uses an `expressionFilter` to ignore commits authored by Kargo, preventing a promotion loop where Kargo's own commits to `main` would trigger new freight.
 
 #### Stages
 
@@ -177,16 +180,16 @@ Warehouse ──► dev (auto) ──► test (auto) ──► prod (manual gate
 
 When Kargo promotes a stage, the `default-promote` PromotionTask runs these steps:
 
-1. **`git-clone`** — checks out `main` to `./src` and the target env branch to `./out`
-2. **`git-clear`** — clears the env branch working directory
-3. **`yaml-update` (chart version)** — updates `helmCharts[0].version` in `./src/addons/kube-prometheus-stack/env/<stage>/kustomization.yaml`
-4. **`yaml-update` (images)** — updates image tags in `./src/addons/kube-prometheus-stack/env/<stage>/values.yaml` for Grafana, Alertmanager, and Prometheus
+1. **`git-clone`** — checks out `main` to `./src` and the target stage branch to `./out` (creating it if it doesn't exist)
+2. **`git-clear`** — wipes `./out` so stale files from prior promotions don't persist
+3. **`yaml-update` (chart version)** — updates `helmCharts[0].version` in `./src/addons/kube-prometheus-stack/stage/<stage>/kustomization.yaml`
+4. **`yaml-update` (images)** — updates image tags in `./src/addons/kube-prometheus-stack/stage/<stage>/values.yaml` for Grafana, Alertmanager, and Prometheus
 5. **`kustomize-build`** — renders the full manifest (chart + extras) into `./out/manifest.yaml`
 6. **`git-commit` + `git-push` (src)** — commits updated versions to `main`
-7. **`git-commit` + `git-push` (out)** — commits rendered manifests to the env branch
-8. **`argocd-update`** — triggers Argo CD to sync the updated application
+7. **`git-commit` + `git-push` (out)** — commits rendered manifests to the stage branch
+8. **`argocd-update`** — forces an immediate Argo CD sync rather than waiting for the next polling interval
 
-The result is two commits per promotion: one to `main` with updated versions, one to the env branch with fresh rendered manifests.
+The result is two commits per promotion: one to `main` with updated versions, one to the stage branch with fresh rendered manifests.
 
 ### Verification
 
@@ -206,7 +209,7 @@ Each addon follows this convention:
 
 ```
 addons/<addon-name>/
-  env/
+  stage/
     dev/   kustomization.yaml + values.yaml
     test/  kustomization.yaml + values.yaml
     prod/  kustomization.yaml + values.yaml
@@ -225,10 +228,10 @@ kargo-resources/<addon-name>/
 appsets/<addon-name>.yaml   →   argocd/<addon-name>.yaml (generated)
 ```
 
-Each `env/<stage>/kustomization.yaml` uses Kustomize's `helmCharts` field to render the chart, and includes `../../extras` as a resource to bundle any additional manifests.
+Each `stage/<stage>/kustomization.yaml` uses Kustomize's `helmCharts` field to render the chart, and includes `../../extras` as a resource to bundle any additional manifests.
 
 To add a new addon:
-1. Create `addons/<addon-name>/env/{dev,test,prod}/kustomization.yaml` and `values.yaml`
+1. Create `addons/<addon-name>/stage/{dev,test,prod}/kustomization.yaml` and `values.yaml`
 2. Create `addons/<addon-name>/extras/` with any additional resources
 3. Create `appsets/<addon-name>.yaml` — Kargo-authorized ApplicationSet
 4. Run `./generate-apps.sh` (or let the GitHub Action do it) to produce `argocd/<addon-name>.yaml`
@@ -282,7 +285,7 @@ The `kargo-promote-non-prod` ServiceAccount (`kargo-resources/kube-prometheus-st
 | `test` | `test` | Yes | `*.test.localhost` |
 | `prod` | `prod` | No (manual) | `*.prod.localhost` |
 
-Dev also includes a local Prometheus data source configured in Grafana pointing to `http://host.docker.internal:9090` for local development use.
+Dev includes a local Prometheus data source configured in Grafana pointing to `http://host.docker.internal:9090` for local development use.
 
 ---
 
