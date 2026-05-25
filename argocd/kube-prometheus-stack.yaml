@@ -16,7 +16,7 @@ spec:
   source:
     path: .
     repoURL: https://github.com/34fathombelow/kargo-helm-prom-stack.git
-    targetRevision: addon/kube-prometheus.stack/env/dev
+    targetRevision: addon/kube-prometheus.stack/stage/dev
   syncPolicy:
     automated:
       prune: true
@@ -41,7 +41,7 @@ spec:
   source:
     path: .
     repoURL: https://github.com/34fathombelow/kargo-helm-prom-stack.git
-    targetRevision: addon/kube-prometheus.stack/env/prod
+    targetRevision: addon/kube-prometheus.stack/stage/prod
   syncPolicy:
     automated:
       prune: true
@@ -66,7 +66,7 @@ spec:
   source:
     path: .
     repoURL: https://github.com/34fathombelow/kargo-helm-prom-stack.git
-    targetRevision: addon/kube-prometheus.stack/env/test
+    targetRevision: addon/kube-prometheus.stack/stage/test
   syncPolicy:
     automated:
       prune: true
