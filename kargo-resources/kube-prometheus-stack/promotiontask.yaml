@@ -65,7 +65,7 @@ spec:
     config:
       path: ./out
       message: rendered updated manifests
-  # Push image & Chart changes to the Git repository.
+  # Push image & kustomize changes to the Git repository.
   - uses: git-push
     config:
       path: ./src
