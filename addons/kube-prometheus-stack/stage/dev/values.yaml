@@ -1,7 +1,7 @@
 alertmanager:
   alertmanagerSpec:
     image:
-      tag: v0.32.1
+      tag: v0.32.2
   ingress:
     enabled: true
     hosts:
