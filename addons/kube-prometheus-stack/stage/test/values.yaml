@@ -35,7 +35,7 @@ grafana:
 prometheus:
   prometheusSpec:
     image:
-      tag: v3.13.0
+      tag: v3.13.1
   ingress:
     enabled: true
     hosts:
