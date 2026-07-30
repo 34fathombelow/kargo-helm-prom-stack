@@ -82457,7 +82457,7 @@ spec:
   enableOTLPReceiver: false
   externalUrl: http://prometheus-dev.localhost/
   hostNetwork: false
-  image: quay.io/prometheus/prometheus:v3.13.1
+  image: quay.io/prometheus/prometheus:v3.13.2
   imagePullPolicy: IfNotPresent
   listenLocal: false
   logFormat: logfmt
@@ -82498,7 +82498,7 @@ spec:
   shards: 1
   tsdb:
     outOfOrderTimeWindow: 0s
-  version: v3.13.1
+  version: v3.13.2
   walCompression: true
 ---
 apiVersion: monitoring.coreos.com/v1
