@@ -2962,7 +2962,7 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.21.0
-    operator.prometheus.io/version: 0.92.1
+    operator.prometheus.io/version: 0.93.0
   name: alertmanagerconfigs.monitoring.coreos.com
 spec:
   group: monitoring.coreos.com
@@ -10330,6 +10330,12 @@ spec:
                             description: titleLink defines the URL that the title
                               will link to when clicked.
                             type: string
+                          updateMessage:
+                            description: |-
+                              updateMessage enables updating existing Slack messages instead of creating new ones
+                              when alert state changes. Please note that Webhook URLs do not support updates.
+                              It requires Alertmanager >= v0.32.0.
+                            type: boolean
                           username:
                             description: username defines the slack bot user name.
                             minLength: 1
@@ -11181,6 +11187,14 @@ spec:
                               If you don't specify this value, you must specify a value for the PhoneNumber or TargetARN.
                             minLength: 1
                             type: string
+                          useAWSHTTPClient:
+                            description: |-
+                              useAWSHTTPClient forces the AWS SDK's BuildableClient instead of
+                              alertmanager's tracing-wrapped HTTP client. Auto-enabled when AWS_CA_BUNDLE
+                              is set; set explicitly when configuring ca_bundle via shared AWS config.
+
+                              It requires Alertmanager >= 0.33.0.
+                            type: boolean
                         type: object
                       type: array
                       x-kubernetes-list-type: atomic
@@ -15329,7 +15343,7 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.21.0
-    operator.prometheus.io/version: 0.92.1
+    operator.prometheus.io/version: 0.93.0
   name: alertmanagers.monitoring.coreos.com
 spec:
   group: monitoring.coreos.com
@@ -24960,6 +24974,7 @@ spec:
                       getConcurrency defines the maximum number of GET requests processed concurrently. This corresponds to the
                       Alertmanager's `--web.get-concurrency` flag.
                     format: int32
+                    minimum: 0
                     type: integer
                   httpConfig:
                     description: httpConfig defines HTTP parameters for web server.
@@ -25020,6 +25035,7 @@ spec:
                       timeout for HTTP requests. This corresponds to the Alertmanager's
                       `--web.timeout` flag.
                     format: int32
+                    minimum: 0
                     type: integer
                   tlsConfig:
                     description: tlsConfig defines the TLS parameters for HTTPS.
@@ -25339,7 +25355,7 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.21.0
-    operator.prometheus.io/version: 0.92.1
+    operator.prometheus.io/version: 0.93.0
   name: podmonitors.monitoring.coreos.com
 spec:
   group: monitoring.coreos.com
@@ -25453,6 +25469,7 @@ spec:
 
                   It requires Prometheus >= v2.47.0.
                 format: int64
+                minimum: 0
                 type: integer
               labelLimit:
                 description: |-
@@ -25460,6 +25477,7 @@ spec:
 
                   It requires Prometheus >= v2.27.0.
                 format: int64
+                minimum: 0
                 type: integer
               labelNameLengthLimit:
                 description: |-
@@ -25467,6 +25485,7 @@ spec:
 
                   It requires Prometheus >= v2.27.0.
                 format: int64
+                minimum: 0
                 type: integer
               labelValueLengthLimit:
                 description: |-
@@ -25474,6 +25493,7 @@ spec:
 
                   It requires Prometheus >= v2.27.0.
                 format: int64
+                minimum: 0
                 type: integer
               namespaceSelector:
                 description: |-
@@ -25498,6 +25518,7 @@ spec:
                   buckets will be merged to stay within the limit.
                   It requires Prometheus >= v2.45.0.
                 format: int64
+                minimum: 0
                 type: integer
               nativeHistogramMinBucketFactor:
                 anyOf:
@@ -25734,6 +25755,7 @@ spec:
 
                               Only applicable when the action is `HashMod`.
                             format: int64
+                            minimum: 0
                             type: integer
                           regex:
                             description: regex defines the regular expression against
@@ -26258,6 +26280,7 @@ spec:
 
                               Only applicable when the action is `HashMod`.
                             format: int64
+                            minimum: 0
                             type: integer
                           regex:
                             description: regex defines the regular expression against
@@ -26514,6 +26537,7 @@ spec:
                   sampleLimit defines a per-scrape limit on the number of scraped samples
                   that will be accepted.
                 format: int64
+                minimum: 0
                 type: integer
               scrapeClass:
                 description: scrapeClass defines the scrape class to apply.
@@ -26621,6 +26645,7 @@ spec:
                   targetLimit defines a limit on the number of scraped targets that will
                   be accepted.
                 format: int64
+                minimum: 0
                 type: integer
             required:
             - selector
@@ -26741,7 +26766,7 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.21.0
-    operator.prometheus.io/version: 0.92.1
+    operator.prometheus.io/version: 0.93.0
   name: probes.monitoring.coreos.com
 spec:
   group: monitoring.coreos.com
@@ -26962,24 +26987,28 @@ spec:
 
                   It requires Prometheus >= v2.47.0.
                 format: int64
+                minimum: 0
                 type: integer
               labelLimit:
                 description: |-
                   labelLimit defines the per-scrape limit on number of labels that will be accepted for a sample.
                   Only valid in Prometheus versions 2.27.0 and newer.
                 format: int64
+                minimum: 0
                 type: integer
               labelNameLengthLimit:
                 description: |-
                   labelNameLengthLimit defines the per-scrape limit on length of labels name that will be accepted for a sample.
                   Only valid in Prometheus versions 2.27.0 and newer.
                 format: int64
+                minimum: 0
                 type: integer
               labelValueLengthLimit:
                 description: |-
                   labelValueLengthLimit defines the per-scrape limit on length of labels value that will be accepted for a sample.
                   Only valid in Prometheus versions 2.27.0 and newer.
                 format: int64
+                minimum: 0
                 type: integer
               metricRelabelings:
                 description: metricRelabelings defines the RelabelConfig to apply
@@ -27030,6 +27059,7 @@ spec:
 
                         Only applicable when the action is `HashMod`.
                       format: int64
+                      minimum: 0
                       type: integer
                     regex:
                       description: regex defines the regular expression against which
@@ -27081,6 +27111,7 @@ spec:
                   buckets will be merged to stay within the limit.
                   It requires Prometheus >= v2.45.0.
                 format: int64
+                minimum: 0
                 type: integer
               nativeHistogramMinBucketFactor:
                 anyOf:
@@ -27540,6 +27571,7 @@ spec:
                 description: sampleLimit defines per-scrape limit on number of scraped
                   samples that will be accepted.
                 format: int64
+                minimum: 0
                 type: integer
               scrapeClass:
                 description: scrapeClass defines the scrape class to apply.
@@ -27594,6 +27626,7 @@ spec:
                 description: targetLimit defines a limit on the number of scraped
                   targets that will be accepted.
                 format: int64
+                minimum: 0
                 type: integer
               targets:
                 description: targets defines a set of static or dynamically discovered
@@ -27676,6 +27709,7 @@ spec:
 
                                 Only applicable when the action is `HashMod`.
                               format: int64
+                              minimum: 0
                               type: integer
                             regex:
                               description: regex defines the regular expression against
@@ -27826,6 +27860,7 @@ spec:
 
                                 Only applicable when the action is `HashMod`.
                               format: int64
+                              minimum: 0
                               type: integer
                             regex:
                               description: regex defines the regular expression against
@@ -28156,7 +28191,7 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.21.0
-    operator.prometheus.io/version: 0.92.1
+    operator.prometheus.io/version: 0.93.0
   name: prometheusagents.monitoring.coreos.com
 spec:
   group: monitoring.coreos.com
@@ -31283,6 +31318,7 @@ spec:
                   * Scrape objects with a keepDroppedTargets value less than or equal to enforcedKeepDroppedTargets keep their specific value.
                   * Scrape objects with a keepDroppedTargets value greater than enforcedKeepDroppedTargets are set to enforcedKeepDroppedTargets.
                 format: int64
+                minimum: 0
                 type: integer
               enforcedLabelLimit:
                 description: |-
@@ -31299,6 +31335,7 @@ spec:
                   * Scrape objects with a labelLimit value less than or equal to enforcedLabelLimit keep their specific value.
                   * Scrape objects with a labelLimit value greater than enforcedLabelLimit are set to enforcedLabelLimit.
                 format: int64
+                minimum: 0
                 type: integer
               enforcedLabelNameLengthLimit:
                 description: |-
@@ -31315,6 +31352,7 @@ spec:
                   * Scrape objects with a labelNameLengthLimit value less than or equal to enforcedLabelNameLengthLimit keep their specific value.
                   * Scrape objects with a labelNameLengthLimit value greater than enforcedLabelNameLengthLimit are set to enforcedLabelNameLengthLimit.
                 format: int64
+                minimum: 0
                 type: integer
               enforcedLabelValueLengthLimit:
                 description: |-
@@ -31331,6 +31369,7 @@ spec:
                   * Scrape objects with a labelValueLengthLimit value less than or equal to enforcedLabelValueLengthLimit keep their specific value.
                   * Scrape objects with a labelValueLengthLimit value greater than enforcedLabelValueLengthLimit are set to enforcedLabelValueLengthLimit.
                 format: int64
+                minimum: 0
                 type: integer
               enforcedNamespaceLabel:
                 description: |-
@@ -31364,6 +31403,7 @@ spec:
                   * Scrape objects with a sampleLimit value less than or equal to enforcedSampleLimit keep their specific value.
                   * Scrape objects with a sampleLimit value greater than enforcedSampleLimit are set to enforcedSampleLimit.
                 format: int64
+                minimum: 0
                 type: integer
               enforcedTargetLimit:
                 description: |-
@@ -31381,6 +31421,7 @@ spec:
                   * Scrape objects with a targetLimit value less than or equal to enforcedTargetLimit keep their specific value.
                   * Scrape objects with a targetLimit value greater than enforcedTargetLimit are set to enforcedTargetLimit.
                 format: int64
+                minimum: 0
                 type: integer
               excludedFromEnforcement:
                 description: |-
@@ -33081,6 +33122,7 @@ spec:
                   Note that the global limit only applies to scrape objects that don't specify an explicit limit value.
                   If you want to enforce a maximum limit for all scrape objects, refer to enforcedKeepDroppedTargets.
                 format: int64
+                minimum: 0
                 type: integer
               labelLimit:
                 description: |-
@@ -33090,6 +33132,7 @@ spec:
                   Note that the global limit only applies to scrape objects that don't specify an explicit limit value.
                   If you want to enforce a maximum limit for all scrape objects, refer to enforcedLabelLimit.
                 format: int64
+                minimum: 0
                 type: integer
               labelNameLengthLimit:
                 description: |-
@@ -33099,6 +33142,7 @@ spec:
                   Note that the global limit only applies to scrape objects that don't specify an explicit limit value.
                   If you want to enforce a maximum limit for all scrape objects, refer to enforcedLabelNameLengthLimit.
                 format: int64
+                minimum: 0
                 type: integer
               labelValueLengthLimit:
                 description: |-
@@ -33108,6 +33152,7 @@ spec:
                   Note that the global limit only applies to scrape objects that don't specify an explicit limit value.
                   If you want to enforce a maximum limit for all scrape objects, refer to enforcedLabelValueLengthLimit.
                 format: int64
+                minimum: 0
                 type: integer
               listenLocal:
                 description: |-
@@ -33909,8 +33954,10 @@ spec:
                           minimum: -1
                           type: integer
                         send:
-                          description: send defines whether metric metadata is sent
-                            to the remote storage or not.
+                          description: |-
+                            send defines whether metric metadata is sent to the remote storage or not.
+
+                            The setting is ignored when Remote Write message's version 2.0 is used.
                           type: boolean
                         sendInterval:
                           description: sendInterval defines how frequently metric
@@ -34718,6 +34765,7 @@ spec:
 
                               Only applicable when the action is `HashMod`.
                             format: int64
+                            minimum: 0
                             type: integer
                           regex:
                             description: regex defines the regular expression against
@@ -34881,6 +34929,7 @@ spec:
                   Note that the global limit only applies to scrape objects that don't specify an explicit limit value.
                   If you want to enforce a maximum limit for all scrape objects, refer to enforcedSampleLimit.
                 format: int64
+                minimum: 0
                 type: integer
               schedulerName:
                 description: schedulerName defines the scheduler to use for Pod scheduling.
@@ -35033,6 +35082,7 @@ spec:
 
                               Only applicable when the action is `HashMod`.
                             format: int64
+                            minimum: 0
                             type: integer
                           regex:
                             description: regex defines the regular expression against
@@ -35132,6 +35182,7 @@ spec:
 
                               Only applicable when the action is `HashMod`.
                             format: int64
+                            minimum: 0
                             type: integer
                           regex:
                             description: regex defines the regular expression against
@@ -35966,6 +36017,7 @@ spec:
                 - message: topology can only be defined when mode is set to 'Topology'
                   rule: '!has(self.topology) || (has(self.mode) && self.mode == ''Topology'')'
               shards:
+                default: 1
                 description: |-
                   shards defines the number of shards to distribute the scraped targets onto.
 
@@ -35993,6 +36045,8 @@ spec:
                   You can also disable sharding on a specific target by setting the
                   `__tmp_disable_sharding` label with relabeling configuration. When
                   the label value isn't empty, all Prometheus shards will scrape the target.
+
+                  Default: 1
                 format: int32
                 type: integer
               storage:
@@ -36712,6 +36766,7 @@ spec:
                   Note that the global limit only applies to scrape objects that don't specify an explicit limit value.
                   If you want to enforce a maximum limit for all scrape objects, refer to enforcedTargetLimit.
                 format: int64
+                minimum: 0
                 type: integer
               terminationGracePeriodSeconds:
                 description: |-
@@ -37182,6 +37237,31 @@ spec:
                   tsdb defines the runtime reloadable configuration of the timeseries database(TSDB).
                   It requires Prometheus >= v2.39.0 or PrometheusAgent >= v2.54.0.
                 properties:
+                  chunkEncoding:
+                    description: |-
+                      chunkEncoding configures per-chunk-type encoding overrides.
+
+                      It requires Prometheus >= v3.13.0.
+
+                      Notice: Setting "Xor" is incompatible with --enable-feature=st-storage
+                      (XOR chunks do not store start timestamps).
+                    properties:
+                      floats:
+                        description: |-
+                          floats selects the encoding used for float chunks.
+                          Valid values are "Xor" and "Xor2".
+
+                          Notice:
+                           * Setting "Xor" is incompatible with --enable-feature=st-storage
+                          (XOR chunks do not store start timestamps).
+                           * Setting "Xor2" automatically adds the `xor2-encoding` feature flag.
+
+                          It requires Prometheus >= v3.13.0.
+                        enum:
+                        - Xor
+                        - Xor2
+                        type: string
+                    type: object
                   outOfOrderTimeWindow:
                     description: |-
                       outOfOrderTimeWindow defines how old an out-of-order/out-of-bounds sample can be with
@@ -39712,7 +39792,7 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.21.0
-    operator.prometheus.io/version: 0.92.1
+    operator.prometheus.io/version: 0.93.0
   name: prometheuses.monitoring.coreos.com
 spec:
   group: monitoring.coreos.com
@@ -40897,6 +40977,7 @@ spec:
 
                                   Only applicable when the action is `HashMod`.
                                 format: int64
+                                minimum: 0
                                 type: integer
                               regex:
                                 description: regex defines the regular expression
@@ -41181,6 +41262,7 @@ spec:
 
                                   Only applicable when the action is `HashMod`.
                                 format: int64
+                                minimum: 0
                                 type: integer
                               regex:
                                 description: regex defines the regular expression
@@ -43477,8 +43559,15 @@ spec:
               disableCompaction:
                 description: |-
                   disableCompaction when true, the Prometheus compaction is disabled.
-                  When `spec.thanos.objectStorageConfig` or `spec.objectStorageConfigFile` are defined, the operator automatically
-                  disables block compaction to avoid race conditions during block uploads (as the Thanos documentation recommends).
+
+                  When `spec.thanos.objectStorageConfig` or `spec.thanos.objectStorageConfigFile` are defined, the operator's
+                  default handling depends on the Prometheus and Thanos sidecar versions:
+                    - With Prometheus < v3.9.0 or a Thanos sidecar < v0.41.0, block compaction is disabled to avoid race
+                      conditions during block uploads (as the Thanos documentation recommends).
+                    - With Prometheus >= v3.9.0 and a Thanos sidecar >= v0.41.0, local compaction is kept enabled and coordinated
+                      with the sidecar through the shipper meta file (`--storage.tsdb.delay-compact-file.path`), so blocks are only
+                      compacted after they have been uploaded.
+                  Setting this field to true always disables local compaction regardless of the versions.
                 type: boolean
               dnsConfig:
                 description: dnsConfig defines the DNS configuration for the pods.
@@ -43617,6 +43706,7 @@ spec:
                   * Scrape objects with a keepDroppedTargets value less than or equal to enforcedKeepDroppedTargets keep their specific value.
                   * Scrape objects with a keepDroppedTargets value greater than enforcedKeepDroppedTargets are set to enforcedKeepDroppedTargets.
                 format: int64
+                minimum: 0
                 type: integer
               enforcedLabelLimit:
                 description: |-
@@ -43633,6 +43723,7 @@ spec:
                   * Scrape objects with a labelLimit value less than or equal to enforcedLabelLimit keep their specific value.
                   * Scrape objects with a labelLimit value greater than enforcedLabelLimit are set to enforcedLabelLimit.
                 format: int64
+                minimum: 0
                 type: integer
               enforcedLabelNameLengthLimit:
                 description: |-
@@ -43649,6 +43740,7 @@ spec:
                   * Scrape objects with a labelNameLengthLimit value less than or equal to enforcedLabelNameLengthLimit keep their specific value.
                   * Scrape objects with a labelNameLengthLimit value greater than enforcedLabelNameLengthLimit are set to enforcedLabelNameLengthLimit.
                 format: int64
+                minimum: 0
                 type: integer
               enforcedLabelValueLengthLimit:
                 description: |-
@@ -43665,6 +43757,7 @@ spec:
                   * Scrape objects with a labelValueLengthLimit value less than or equal to enforcedLabelValueLengthLimit keep their specific value.
                   * Scrape objects with a labelValueLengthLimit value greater than enforcedLabelValueLengthLimit are set to enforcedLabelValueLengthLimit.
                 format: int64
+                minimum: 0
                 type: integer
               enforcedNamespaceLabel:
                 description: |-
@@ -43698,6 +43791,7 @@ spec:
                   * Scrape objects with a sampleLimit value less than or equal to enforcedSampleLimit keep their specific value.
                   * Scrape objects with a sampleLimit value greater than enforcedSampleLimit are set to enforcedSampleLimit.
                 format: int64
+                minimum: 0
                 type: integer
               enforcedTargetLimit:
                 description: |-
@@ -43715,6 +43809,7 @@ spec:
                   * Scrape objects with a targetLimit value less than or equal to enforcedTargetLimit keep their specific value.
                   * Scrape objects with a targetLimit value greater than enforcedTargetLimit are set to enforcedTargetLimit.
                 format: int64
+                minimum: 0
                 type: integer
               evaluationInterval:
                 default: 30s
@@ -45439,6 +45534,7 @@ spec:
                   Note that the global limit only applies to scrape objects that don't specify an explicit limit value.
                   If you want to enforce a maximum limit for all scrape objects, refer to enforcedKeepDroppedTargets.
                 format: int64
+                minimum: 0
                 type: integer
               labelLimit:
                 description: |-
@@ -45448,6 +45544,7 @@ spec:
                   Note that the global limit only applies to scrape objects that don't specify an explicit limit value.
                   If you want to enforce a maximum limit for all scrape objects, refer to enforcedLabelLimit.
                 format: int64
+                minimum: 0
                 type: integer
               labelNameLengthLimit:
                 description: |-
@@ -45457,6 +45554,7 @@ spec:
                   Note that the global limit only applies to scrape objects that don't specify an explicit limit value.
                   If you want to enforce a maximum limit for all scrape objects, refer to enforcedLabelNameLengthLimit.
                 format: int64
+                minimum: 0
                 type: integer
               labelValueLengthLimit:
                 description: |-
@@ -45466,6 +45564,7 @@ spec:
                   Note that the global limit only applies to scrape objects that don't specify an explicit limit value.
                   If you want to enforce a maximum limit for all scrape objects, refer to enforcedLabelValueLengthLimit.
                 format: int64
+                minimum: 0
                 type: integer
               listenLocal:
                 description: |-
@@ -47068,8 +47167,10 @@ spec:
                           minimum: -1
                           type: integer
                         send:
-                          description: send defines whether metric metadata is sent
-                            to the remote storage or not.
+                          description: |-
+                            send defines whether metric metadata is sent to the remote storage or not.
+
+                            The setting is ignored when Remote Write message's version 2.0 is used.
                           type: boolean
                         sendInterval:
                           description: sendInterval defines how frequently metric
@@ -47877,6 +47978,7 @@ spec:
 
                               Only applicable when the action is `HashMod`.
                             format: int64
+                            minimum: 0
                             type: integer
                           regex:
                             description: regex defines the regular expression against
@@ -48185,6 +48287,7 @@ spec:
                   Note that the global limit only applies to scrape objects that don't specify an explicit limit value.
                   If you want to enforce a maximum limit for all scrape objects, refer to enforcedSampleLimit.
                 format: int64
+                minimum: 0
                 type: integer
               schedulerName:
                 description: schedulerName defines the scheduler to use for Pod scheduling.
@@ -48337,6 +48440,7 @@ spec:
 
                               Only applicable when the action is `HashMod`.
                             format: int64
+                            minimum: 0
                             type: integer
                           regex:
                             description: regex defines the regular expression against
@@ -48436,6 +48540,7 @@ spec:
 
                               Only applicable when the action is `HashMod`.
                             format: int64
+                            minimum: 0
                             type: integer
                           regex:
                             description: regex defines the regular expression against
@@ -49310,6 +49415,7 @@ spec:
                 - message: topology can only be defined when mode is set to 'Topology'
                   rule: '!has(self.topology) || (has(self.mode) && self.mode == ''Topology'')'
               shards:
+                default: 1
                 description: |-
                   shards defines the number of shards to distribute the scraped targets onto.
 
@@ -49337,6 +49443,8 @@ spec:
                   You can also disable sharding on a specific target by setting the
                   `__tmp_disable_sharding` label with relabeling configuration. When
                   the label value isn't empty, all Prometheus shards will scrape the target.
+
+                  Default: 1
                 format: int32
                 type: integer
               storage:
@@ -50060,6 +50168,7 @@ spec:
                   Note that the global limit only applies to scrape objects that don't specify an explicit limit value.
                   If you want to enforce a maximum limit for all scrape objects, refer to enforcedTargetLimit.
                 format: int64
+                minimum: 0
                 type: integer
               terminationGracePeriodSeconds:
                 description: |-
@@ -51082,6 +51191,31 @@ spec:
                   tsdb defines the runtime reloadable configuration of the timeseries database(TSDB).
                   It requires Prometheus >= v2.39.0 or PrometheusAgent >= v2.54.0.
                 properties:
+                  chunkEncoding:
+                    description: |-
+                      chunkEncoding configures per-chunk-type encoding overrides.
+
+                      It requires Prometheus >= v3.13.0.
+
+                      Notice: Setting "Xor" is incompatible with --enable-feature=st-storage
+                      (XOR chunks do not store start timestamps).
+                    properties:
+                      floats:
+                        description: |-
+                          floats selects the encoding used for float chunks.
+                          Valid values are "Xor" and "Xor2".
+
+                          Notice:
+                           * Setting "Xor" is incompatible with --enable-feature=st-storage
+                          (XOR chunks do not store start timestamps).
+                           * Setting "Xor2" automatically adds the `xor2-encoding` feature flag.
+
+                          It requires Prometheus >= v3.13.0.
+                        enum:
+                        - Xor
+                        - Xor2
+                        type: string
+                    type: object
                   outOfOrderTimeWindow:
                     description: |-
                       outOfOrderTimeWindow defines how old an out-of-order/out-of-bounds sample can be with
@@ -53585,7 +53719,7 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.21.0
-    operator.prometheus.io/version: 0.92.1
+    operator.prometheus.io/version: 0.93.0
   name: prometheusrules.monitoring.coreos.com
 spec:
   group: monitoring.coreos.com
@@ -53851,7 +53985,7 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.21.0
-    operator.prometheus.io/version: 0.92.1
+    operator.prometheus.io/version: 0.93.0
   name: scrapeconfigs.monitoring.coreos.com
 spec:
   group: monitoring.coreos.com
@@ -60802,6 +60936,7 @@ spec:
 
                   It requires Prometheus >= v2.47.0.
                 format: int64
+                minimum: 0
                 type: integer
               kubernetesSDConfigs:
                 description: kubernetesSDConfigs defines a list of Kubernetes service
@@ -62250,18 +62385,21 @@ spec:
                   labelLimit defines the per-scrape limit on number of labels that will be accepted for a sample.
                   Only valid in Prometheus versions 2.27.0 and newer.
                 format: int64
+                minimum: 0
                 type: integer
               labelNameLengthLimit:
                 description: |-
                   labelNameLengthLimit defines the per-scrape limit on length of labels name that will be accepted for a sample.
                   Only valid in Prometheus versions 2.27.0 and newer.
                 format: int64
+                minimum: 0
                 type: integer
               labelValueLengthLimit:
                 description: |-
                   labelValueLengthLimit defines the per-scrape limit on length of labels value that will be accepted for a sample.
                   Only valid in Prometheus versions 2.27.0 and newer.
                 format: int64
+                minimum: 0
                 type: integer
               lightSailSDConfigs:
                 description: lightSailSDConfigs defines a list of Lightsail service
@@ -63678,6 +63816,7 @@ spec:
 
                         Only applicable when the action is `HashMod`.
                       format: int64
+                      minimum: 0
                       type: integer
                     regex:
                       description: regex defines the regular expression against which
@@ -63749,6 +63888,7 @@ spec:
                   buckets will be merged to stay within the limit.
                   It requires Prometheus >= v2.45.0.
                 format: int64
+                minimum: 0
                 type: integer
               nativeHistogramMinBucketFactor:
                 anyOf:
@@ -66018,6 +66158,7 @@ spec:
 
                         Only applicable when the action is `HashMod`.
                       format: int64
+                      minimum: 0
                       type: integer
                     regex:
                       description: regex defines the regular expression against which
@@ -66062,6 +66203,7 @@ spec:
                 description: sampleLimit defines per-scrape limit on number of scraped
                   samples that will be accepted.
                 format: int64
+                minimum: 0
                 type: integer
               scalewaySDConfigs:
                 description: scalewaySDConfigs defines a list of Scaleway instances
@@ -66482,6 +66624,7 @@ spec:
                 description: targetLimit defines a limit on the number of scraped
                   targets that will be accepted.
                 format: int64
+                minimum: 0
                 type: integer
               tlsConfig:
                 description: tlsConfig defines the TLS configuration to use on every
@@ -66779,7 +66922,7 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.21.0
-    operator.prometheus.io/version: 0.92.1
+    operator.prometheus.io/version: 0.93.0
   name: servicemonitors.monitoring.coreos.com
 spec:
   group: monitoring.coreos.com
@@ -67095,6 +67238,7 @@ spec:
 
                               Only applicable when the action is `HashMod`.
                             format: int64
+                            minimum: 0
                             type: integer
                           regex:
                             description: regex defines the regular expression against
@@ -67595,6 +67739,7 @@ spec:
 
                               Only applicable when the action is `HashMod`.
                             format: int64
+                            minimum: 0
                             type: integer
                           regex:
                             description: regex defines the regular expression against
@@ -67884,6 +68029,7 @@ spec:
 
                   It requires Prometheus >= v2.47.0.
                 format: int64
+                minimum: 0
                 type: integer
               labelLimit:
                 description: |-
@@ -67891,6 +68037,7 @@ spec:
 
                   It requires Prometheus >= v2.27.0.
                 format: int64
+                minimum: 0
                 type: integer
               labelNameLengthLimit:
                 description: |-
@@ -67898,6 +68045,7 @@ spec:
 
                   It requires Prometheus >= v2.27.0.
                 format: int64
+                minimum: 0
                 type: integer
               labelValueLengthLimit:
                 description: |-
@@ -67905,6 +68053,7 @@ spec:
 
                   It requires Prometheus >= v2.27.0.
                 format: int64
+                minimum: 0
                 type: integer
               namespaceSelector:
                 description: |-
@@ -67929,6 +68078,7 @@ spec:
                   buckets will be merged to stay within the limit.
                   It requires Prometheus >= v2.45.0.
                 format: int64
+                minimum: 0
                 type: integer
               nativeHistogramMinBucketFactor:
                 anyOf:
@@ -67952,6 +68102,7 @@ spec:
                   sampleLimit defines a per-scrape limit on the number of scraped samples
                   that will be accepted.
                 format: int64
+                minimum: 0
                 type: integer
               scrapeClass:
                 description: scrapeClass defines the scrape class to apply.
@@ -68077,6 +68228,7 @@ spec:
                   targetLimit defines a limit on the number of scraped targets that will
                   be accepted.
                 format: int64
+                minimum: 0
                 type: integer
             required:
             - endpoints
@@ -68198,7 +68350,7 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.21.0
-    operator.prometheus.io/version: 0.92.1
+    operator.prometheus.io/version: 0.93.0
   name: thanosrulers.monitoring.coreos.com
 spec:
   group: monitoring.coreos.com
@@ -73311,8 +73463,10 @@ spec:
                           minimum: -1
                           type: integer
                         send:
-                          description: send defines whether metric metadata is sent
-                            to the remote storage or not.
+                          description: |-
+                            send defines whether metric metadata is sent to the remote storage or not.
+
+                            The setting is ignored when Remote Write message's version 2.0 is used.
                           type: boolean
                         sendInterval:
                           description: sendInterval defines how frequently metric
@@ -74120,6 +74274,7 @@ spec:
 
                               Only applicable when the action is `HashMod`.
                             format: int64
+                            minimum: 0
                             type: integer
                           regex:
                             description: regex defines the regular expression against
@@ -78039,8 +78194,8 @@ metadata:
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: kube-prometheus-stack-alertmanager
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 87.21.0
-    chart: kube-prometheus-stack-87.21.0
+    app.kubernetes.io/version: 88.0.0
+    chart: kube-prometheus-stack-88.0.0
     heritage: Helm
     release: kube-prometheus-stack
   name: kube-prometheus-stack-alertmanager
@@ -78057,8 +78212,8 @@ metadata:
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: kube-prometheus-stack-prometheus-operator
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 87.21.0
-    chart: kube-prometheus-stack-87.21.0
+    app.kubernetes.io/version: 88.0.0
+    chart: kube-prometheus-stack-88.0.0
     heritage: Helm
     release: kube-prometheus-stack
   name: kube-prometheus-stack-operator
@@ -78075,8 +78230,8 @@ metadata:
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: kube-prometheus-stack-prometheus
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 87.21.0
-    chart: kube-prometheus-stack-87.21.0
+    app.kubernetes.io/version: 88.0.0
+    chart: kube-prometheus-stack-88.0.0
     heritage: Helm
     release: kube-prometheus-stack
   name: kube-prometheus-stack-prometheus
@@ -78109,8 +78264,8 @@ metadata:
     app.kubernetes.io/instance: kube-prometheus-stack
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 87.21.0
-    chart: kube-prometheus-stack-87.21.0
+    app.kubernetes.io/version: 88.0.0
+    chart: kube-prometheus-stack-88.0.0
     heritage: Helm
     release: kube-prometheus-stack
   name: alertmanager-kube-prometheus-stack-alertmanager
@@ -78206,8 +78361,8 @@ metadata:
     app.kubernetes.io/instance: kube-prometheus-stack
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 87.21.0
-    chart: kube-prometheus-stack-87.21.0
+    app.kubernetes.io/version: 88.0.0
+    chart: kube-prometheus-stack-88.0.0
     grafana_datasource: "1"
     heritage: Helm
     release: kube-prometheus-stack
@@ -78249,8 +78404,8 @@ metadata:
     app.kubernetes.io/instance: kube-prometheus-stack
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 87.21.0
-    chart: kube-prometheus-stack-87.21.0
+    app.kubernetes.io/version: 88.0.0
+    chart: kube-prometheus-stack-88.0.0
     grafana_dashboard: "1"
     heritage: Helm
     release: kube-prometheus-stack
@@ -78332,8 +78487,8 @@ metadata:
     app.kubernetes.io/instance: kube-prometheus-stack
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 87.21.0
-    chart: kube-prometheus-stack-87.21.0
+    app.kubernetes.io/version: 88.0.0
+    chart: kube-prometheus-stack-88.0.0
     grafana_dashboard: "1"
     heritage: Helm
     release: kube-prometheus-stack
@@ -78445,8 +78600,8 @@ metadata:
     app.kubernetes.io/instance: kube-prometheus-stack
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 87.21.0
-    chart: kube-prometheus-stack-87.21.0
+    app.kubernetes.io/version: 88.0.0
+    chart: kube-prometheus-stack-88.0.0
     grafana_dashboard: "1"
     heritage: Helm
     release: kube-prometheus-stack
@@ -78502,8 +78657,8 @@ metadata:
     app.kubernetes.io/instance: kube-prometheus-stack
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 87.21.0
-    chart: kube-prometheus-stack-87.21.0
+    app.kubernetes.io/version: 88.0.0
+    chart: kube-prometheus-stack-88.0.0
     grafana_dashboard: "1"
     heritage: Helm
     release: kube-prometheus-stack
@@ -78567,8 +78722,8 @@ metadata:
     app.kubernetes.io/instance: kube-prometheus-stack
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 87.21.0
-    chart: kube-prometheus-stack-87.21.0
+    app.kubernetes.io/version: 88.0.0
+    chart: kube-prometheus-stack-88.0.0
     grafana_dashboard: "1"
     heritage: Helm
     release: kube-prometheus-stack
@@ -78607,8 +78762,8 @@ metadata:
     app.kubernetes.io/instance: kube-prometheus-stack
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 87.21.0
-    chart: kube-prometheus-stack-87.21.0
+    app.kubernetes.io/version: 88.0.0
+    chart: kube-prometheus-stack-88.0.0
     grafana_dashboard: "1"
     heritage: Helm
     release: kube-prometheus-stack
@@ -78713,8 +78868,8 @@ metadata:
     app.kubernetes.io/instance: kube-prometheus-stack
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 87.21.0
-    chart: kube-prometheus-stack-87.21.0
+    app.kubernetes.io/version: 88.0.0
+    chart: kube-prometheus-stack-88.0.0
     grafana_dashboard: "1"
     heritage: Helm
     release: kube-prometheus-stack
@@ -78896,8 +79051,8 @@ metadata:
     app.kubernetes.io/instance: kube-prometheus-stack
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 87.21.0
-    chart: kube-prometheus-stack-87.21.0
+    app.kubernetes.io/version: 88.0.0
+    chart: kube-prometheus-stack-88.0.0
     grafana_dashboard: "1"
     heritage: Helm
     release: kube-prometheus-stack
@@ -78976,8 +79131,8 @@ metadata:
     app.kubernetes.io/instance: kube-prometheus-stack
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 87.21.0
-    chart: kube-prometheus-stack-87.21.0
+    app.kubernetes.io/version: 88.0.0
+    chart: kube-prometheus-stack-88.0.0
     grafana_dashboard: "1"
     heritage: Helm
     release: kube-prometheus-stack
@@ -79170,8 +79325,8 @@ metadata:
     app.kubernetes.io/instance: kube-prometheus-stack
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 87.21.0
-    chart: kube-prometheus-stack-87.21.0
+    app.kubernetes.io/version: 88.0.0
+    chart: kube-prometheus-stack-88.0.0
     grafana_dashboard: "1"
     heritage: Helm
     release: kube-prometheus-stack
@@ -79266,8 +79421,8 @@ metadata:
     app.kubernetes.io/instance: kube-prometheus-stack
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 87.21.0
-    chart: kube-prometheus-stack-87.21.0
+    app.kubernetes.io/version: 88.0.0
+    chart: kube-prometheus-stack-88.0.0
     grafana_dashboard: "1"
     heritage: Helm
     release: kube-prometheus-stack
@@ -79307,8 +79462,8 @@ metadata:
     app.kubernetes.io/instance: kube-prometheus-stack
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 87.21.0
-    chart: kube-prometheus-stack-87.21.0
+    app.kubernetes.io/version: 88.0.0
+    chart: kube-prometheus-stack-88.0.0
     grafana_dashboard: "1"
     heritage: Helm
     release: kube-prometheus-stack
@@ -79488,8 +79643,8 @@ metadata:
     app.kubernetes.io/instance: kube-prometheus-stack
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 87.21.0
-    chart: kube-prometheus-stack-87.21.0
+    app.kubernetes.io/version: 88.0.0
+    chart: kube-prometheus-stack-88.0.0
     grafana_dashboard: "1"
     heritage: Helm
     release: kube-prometheus-stack
@@ -79685,8 +79840,8 @@ metadata:
     app.kubernetes.io/instance: kube-prometheus-stack
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 87.21.0
-    chart: kube-prometheus-stack-87.21.0
+    app.kubernetes.io/version: 88.0.0
+    chart: kube-prometheus-stack-88.0.0
     grafana_dashboard: "1"
     heritage: Helm
     release: kube-prometheus-stack
@@ -79890,8 +80045,8 @@ metadata:
     app.kubernetes.io/instance: kube-prometheus-stack
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 87.21.0
-    chart: kube-prometheus-stack-87.21.0
+    app.kubernetes.io/version: 88.0.0
+    chart: kube-prometheus-stack-88.0.0
     grafana_dashboard: "1"
     heritage: Helm
     release: kube-prometheus-stack
@@ -80004,8 +80159,8 @@ metadata:
     app.kubernetes.io/instance: kube-prometheus-stack
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 87.21.0
-    chart: kube-prometheus-stack-87.21.0
+    app.kubernetes.io/version: 88.0.0
+    chart: kube-prometheus-stack-88.0.0
     grafana_dashboard: "1"
     heritage: Helm
     release: kube-prometheus-stack
@@ -80094,8 +80249,8 @@ metadata:
     app.kubernetes.io/instance: kube-prometheus-stack
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 87.21.0
-    chart: kube-prometheus-stack-87.21.0
+    app.kubernetes.io/version: 88.0.0
+    chart: kube-prometheus-stack-88.0.0
     grafana_dashboard: "1"
     heritage: Helm
     release: kube-prometheus-stack
@@ -80237,8 +80392,8 @@ metadata:
     app.kubernetes.io/instance: kube-prometheus-stack
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 87.21.0
-    chart: kube-prometheus-stack-87.21.0
+    app.kubernetes.io/version: 88.0.0
+    chart: kube-prometheus-stack-88.0.0
     grafana_dashboard: "1"
     heritage: Helm
     release: kube-prometheus-stack
@@ -80288,8 +80443,8 @@ metadata:
     app.kubernetes.io/instance: kube-prometheus-stack
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 87.21.0
-    chart: kube-prometheus-stack-87.21.0
+    app.kubernetes.io/version: 88.0.0
+    chart: kube-prometheus-stack-88.0.0
     grafana_dashboard: "1"
     heritage: Helm
     release: kube-prometheus-stack
@@ -80334,8 +80489,8 @@ metadata:
     app.kubernetes.io/instance: kube-prometheus-stack
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 87.21.0
-    chart: kube-prometheus-stack-87.21.0
+    app.kubernetes.io/version: 88.0.0
+    chart: kube-prometheus-stack-88.0.0
     grafana_dashboard: "1"
     heritage: Helm
     release: kube-prometheus-stack
@@ -80401,8 +80556,8 @@ metadata:
     app.kubernetes.io/instance: kube-prometheus-stack
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 87.21.0
-    chart: kube-prometheus-stack-87.21.0
+    app.kubernetes.io/version: 88.0.0
+    chart: kube-prometheus-stack-88.0.0
     grafana_dashboard: "1"
     heritage: Helm
     release: kube-prometheus-stack
@@ -80476,8 +80631,8 @@ metadata:
     app.kubernetes.io/instance: kube-prometheus-stack
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 87.21.0
-    chart: kube-prometheus-stack-87.21.0
+    app.kubernetes.io/version: 88.0.0
+    chart: kube-prometheus-stack-88.0.0
     grafana_dashboard: "1"
     heritage: Helm
     release: kube-prometheus-stack
@@ -80547,8 +80702,8 @@ metadata:
     app.kubernetes.io/instance: kube-prometheus-stack
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 87.21.0
-    chart: kube-prometheus-stack-87.21.0
+    app.kubernetes.io/version: 88.0.0
+    chart: kube-prometheus-stack-88.0.0
     grafana_dashboard: "1"
     heritage: Helm
     release: kube-prometheus-stack
@@ -80601,8 +80756,8 @@ metadata:
     app.kubernetes.io/instance: kube-prometheus-stack
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 87.21.0
-    chart: kube-prometheus-stack-87.21.0
+    app.kubernetes.io/version: 88.0.0
+    chart: kube-prometheus-stack-88.0.0
     grafana_dashboard: "1"
     heritage: Helm
     release: kube-prometheus-stack
@@ -80652,8 +80807,8 @@ metadata:
     app.kubernetes.io/instance: kube-prometheus-stack
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 87.21.0
-    chart: kube-prometheus-stack-87.21.0
+    app.kubernetes.io/version: 88.0.0
+    chart: kube-prometheus-stack-88.0.0
     grafana_dashboard: "1"
     heritage: Helm
     release: kube-prometheus-stack
@@ -80708,8 +80863,8 @@ metadata:
     app.kubernetes.io/instance: kube-prometheus-stack
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 87.21.0
-    chart: kube-prometheus-stack-87.21.0
+    app.kubernetes.io/version: 88.0.0
+    chart: kube-prometheus-stack-88.0.0
     grafana_dashboard: "1"
     heritage: Helm
     release: kube-prometheus-stack
@@ -80767,8 +80922,8 @@ metadata:
     app.kubernetes.io/instance: kube-prometheus-stack
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 87.21.0
-    chart: kube-prometheus-stack-87.21.0
+    app.kubernetes.io/version: 88.0.0
+    chart: kube-prometheus-stack-88.0.0
     grafana_dashboard: "1"
     heritage: Helm
     release: kube-prometheus-stack
@@ -80836,8 +80991,8 @@ metadata:
     app.kubernetes.io/instance: kube-prometheus-stack
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 87.21.0
-    chart: kube-prometheus-stack-87.21.0
+    app.kubernetes.io/version: 88.0.0
+    chart: kube-prometheus-stack-88.0.0
     grafana_dashboard: "1"
     heritage: Helm
     release: kube-prometheus-stack
@@ -80916,8 +81071,8 @@ metadata:
     app.kubernetes.io/instance: kube-prometheus-stack
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 87.21.0
-    chart: kube-prometheus-stack-87.21.0
+    app.kubernetes.io/version: 88.0.0
+    chart: kube-prometheus-stack-88.0.0
     grafana_dashboard: "1"
     heritage: Helm
     release: kube-prometheus-stack
@@ -81165,8 +81320,8 @@ metadata:
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: kube-prometheus-stack-prometheus-operator
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 87.21.0
-    chart: kube-prometheus-stack-87.21.0
+    app.kubernetes.io/version: 88.0.0
+    chart: kube-prometheus-stack-88.0.0
     heritage: Helm
     release: kube-prometheus-stack
   name: kube-prometheus-stack-operator
@@ -81287,8 +81442,8 @@ metadata:
     app.kubernetes.io/instance: kube-prometheus-stack
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 87.21.0
-    chart: kube-prometheus-stack-87.21.0
+    app.kubernetes.io/version: 88.0.0
+    chart: kube-prometheus-stack-88.0.0
     heritage: Helm
     release: kube-prometheus-stack
   name: kube-prometheus-stack-prometheus
@@ -81377,8 +81532,8 @@ metadata:
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: kube-prometheus-stack-prometheus-operator
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 87.21.0
-    chart: kube-prometheus-stack-87.21.0
+    app.kubernetes.io/version: 88.0.0
+    chart: kube-prometheus-stack-88.0.0
     heritage: Helm
     release: kube-prometheus-stack
   name: kube-prometheus-stack-operator
@@ -81399,8 +81554,8 @@ metadata:
     app.kubernetes.io/instance: kube-prometheus-stack
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 87.21.0
-    chart: kube-prometheus-stack-87.21.0
+    app.kubernetes.io/version: 88.0.0
+    chart: kube-prometheus-stack-88.0.0
     heritage: Helm
     release: kube-prometheus-stack
   name: kube-prometheus-stack-prometheus
@@ -81495,8 +81650,8 @@ metadata:
     app.kubernetes.io/instance: kube-prometheus-stack
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 87.21.0
-    chart: kube-prometheus-stack-87.21.0
+    app.kubernetes.io/version: 88.0.0
+    chart: kube-prometheus-stack-88.0.0
     heritage: Helm
     release: kube-prometheus-stack
     self-monitor: "true"
@@ -81526,8 +81681,8 @@ metadata:
     app.kubernetes.io/instance: kube-prometheus-stack
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 87.21.0
-    chart: kube-prometheus-stack-87.21.0
+    app.kubernetes.io/version: 88.0.0
+    chart: kube-prometheus-stack-88.0.0
     heritage: Helm
     jobLabel: coredns
     release: kube-prometheus-stack
@@ -81551,8 +81706,8 @@ metadata:
     app.kubernetes.io/instance: kube-prometheus-stack
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 87.21.0
-    chart: kube-prometheus-stack-87.21.0
+    app.kubernetes.io/version: 88.0.0
+    chart: kube-prometheus-stack-88.0.0
     heritage: Helm
     jobLabel: kube-controller-manager
     release: kube-prometheus-stack
@@ -81577,8 +81732,8 @@ metadata:
     app.kubernetes.io/instance: kube-prometheus-stack
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 87.21.0
-    chart: kube-prometheus-stack-87.21.0
+    app.kubernetes.io/version: 88.0.0
+    chart: kube-prometheus-stack-88.0.0
     heritage: Helm
     jobLabel: kube-etcd
     release: kube-prometheus-stack
@@ -81603,8 +81758,8 @@ metadata:
     app.kubernetes.io/instance: kube-prometheus-stack
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 87.21.0
-    chart: kube-prometheus-stack-87.21.0
+    app.kubernetes.io/version: 88.0.0
+    chart: kube-prometheus-stack-88.0.0
     heritage: Helm
     jobLabel: kube-proxy
     release: kube-prometheus-stack
@@ -81629,8 +81784,8 @@ metadata:
     app.kubernetes.io/instance: kube-prometheus-stack
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 87.21.0
-    chart: kube-prometheus-stack-87.21.0
+    app.kubernetes.io/version: 88.0.0
+    chart: kube-prometheus-stack-88.0.0
     heritage: Helm
     jobLabel: kube-scheduler
     release: kube-prometheus-stack
@@ -81657,8 +81812,8 @@ metadata:
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: kube-prometheus-stack-prometheus-operator
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 87.21.0
-    chart: kube-prometheus-stack-87.21.0
+    app.kubernetes.io/version: 88.0.0
+    chart: kube-prometheus-stack-88.0.0
     heritage: Helm
     release: kube-prometheus-stack
   name: kube-prometheus-stack-operator
@@ -81681,8 +81836,8 @@ metadata:
     app.kubernetes.io/instance: kube-prometheus-stack
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 87.21.0
-    chart: kube-prometheus-stack-87.21.0
+    app.kubernetes.io/version: 88.0.0
+    chart: kube-prometheus-stack-88.0.0
     heritage: Helm
     release: kube-prometheus-stack
     self-monitor: "true"
@@ -82141,8 +82296,8 @@ metadata:
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: kube-prometheus-stack-prometheus-operator
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 87.21.0
-    chart: kube-prometheus-stack-87.21.0
+    app.kubernetes.io/version: 88.0.0
+    chart: kube-prometheus-stack-88.0.0
     heritage: Helm
     release: kube-prometheus-stack
   name: kube-prometheus-stack-operator
@@ -82163,8 +82318,8 @@ spec:
         app.kubernetes.io/managed-by: Helm
         app.kubernetes.io/name: kube-prometheus-stack-prometheus-operator
         app.kubernetes.io/part-of: kube-prometheus-stack
-        app.kubernetes.io/version: 87.21.0
-        chart: kube-prometheus-stack-87.21.0
+        app.kubernetes.io/version: 88.0.0
+        chart: kube-prometheus-stack-88.0.0
         heritage: Helm
         release: kube-prometheus-stack
     spec:
@@ -82175,7 +82330,7 @@ spec:
         - --kubelet-endpoints=true
         - --kubelet-endpointslice=false
         - --localhost=127.0.0.1
-        - --prometheus-config-reloader=quay.io/prometheus-operator/prometheus-config-reloader:v0.92.1
+        - --prometheus-config-reloader=quay.io/prometheus-operator/prometheus-config-reloader:v0.93.0
         - --config-reloader-cpu-request=0
         - --config-reloader-cpu-limit=0
         - --config-reloader-memory-request=0
@@ -82190,7 +82345,7 @@ spec:
         env:
         - name: GOGC
           value: "30"
-        image: quay.io/prometheus-operator/prometheus-operator:v0.92.1
+        image: quay.io/prometheus-operator/prometheus-operator:v0.93.0
         imagePullPolicy: IfNotPresent
         livenessProbe:
           failureThreshold: 3
@@ -82273,8 +82428,8 @@ metadata:
     app.kubernetes.io/instance: kube-prometheus-stack
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 87.21.0
-    chart: kube-prometheus-stack-87.21.0
+    app.kubernetes.io/version: 88.0.0
+    chart: kube-prometheus-stack-88.0.0
     heritage: Helm
     release: kube-prometheus-stack
   name: kube-prometheus-stack-alertmanager
@@ -82300,8 +82455,8 @@ metadata:
     app.kubernetes.io/instance: kube-prometheus-stack
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 87.21.0
-    chart: kube-prometheus-stack-87.21.0
+    app.kubernetes.io/version: 88.0.0
+    chart: kube-prometheus-stack-88.0.0
     heritage: Helm
     release: kube-prometheus-stack
   name: kube-prometheus-stack-prometheus
@@ -82327,8 +82482,8 @@ metadata:
     app.kubernetes.io/instance: kube-prometheus-stack
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 87.21.0
-    chart: kube-prometheus-stack-87.21.0
+    app.kubernetes.io/version: 88.0.0
+    chart: kube-prometheus-stack-88.0.0
     heritage: Helm
     release: kube-prometheus-stack
   name: kube-prometheus-stack-alertmanager
@@ -82385,8 +82540,8 @@ metadata:
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: kube-prometheus-stack-prometheus-operator
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 87.21.0
-    chart: kube-prometheus-stack-87.21.0
+    app.kubernetes.io/version: 88.0.0
+    chart: kube-prometheus-stack-88.0.0
     heritage: Helm
     release: kube-prometheus-stack
   name: kube-prometheus-stack-admission
@@ -82422,8 +82577,8 @@ metadata:
     app.kubernetes.io/instance: kube-prometheus-stack
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 87.21.0
-    chart: kube-prometheus-stack-87.21.0
+    app.kubernetes.io/version: 88.0.0
+    chart: kube-prometheus-stack-88.0.0
     heritage: Helm
     release: kube-prometheus-stack
   name: kube-prometheus-stack-prometheus
@@ -82509,8 +82664,8 @@ metadata:
     app.kubernetes.io/instance: kube-prometheus-stack
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 87.21.0
-    chart: kube-prometheus-stack-87.21.0
+    app.kubernetes.io/version: 88.0.0
+    chart: kube-prometheus-stack-88.0.0
     heritage: Helm
     release: kube-prometheus-stack
   name: kube-prometheus-stack-alertmanager.rules
@@ -82681,8 +82836,8 @@ metadata:
     app.kubernetes.io/instance: kube-prometheus-stack
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 87.21.0
-    chart: kube-prometheus-stack-87.21.0
+    app.kubernetes.io/version: 88.0.0
+    chart: kube-prometheus-stack-88.0.0
     heritage: Helm
     release: kube-prometheus-stack
   name: kube-prometheus-stack-config-reloaders
@@ -82712,8 +82867,8 @@ metadata:
     app.kubernetes.io/instance: kube-prometheus-stack
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 87.21.0
-    chart: kube-prometheus-stack-87.21.0
+    app.kubernetes.io/version: 88.0.0
+    chart: kube-prometheus-stack-88.0.0
     heritage: Helm
     release: kube-prometheus-stack
   name: kube-prometheus-stack-etcd
@@ -82927,8 +83082,8 @@ metadata:
     app.kubernetes.io/instance: kube-prometheus-stack
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 87.21.0
-    chart: kube-prometheus-stack-87.21.0
+    app.kubernetes.io/version: 88.0.0
+    chart: kube-prometheus-stack-88.0.0
     heritage: Helm
     release: kube-prometheus-stack
   name: kube-prometheus-stack-general.rules
@@ -82987,8 +83142,8 @@ metadata:
     app.kubernetes.io/instance: kube-prometheus-stack
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 87.21.0
-    chart: kube-prometheus-stack-87.21.0
+    app.kubernetes.io/version: 88.0.0
+    chart: kube-prometheus-stack-88.0.0
     heritage: Helm
     release: kube-prometheus-stack
   name: kube-prometheus-stack-k8s.rules.container-cpu-usage-seconds-tot
@@ -83020,8 +83175,8 @@ metadata:
     app.kubernetes.io/instance: kube-prometheus-stack
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 87.21.0
-    chart: kube-prometheus-stack-87.21.0
+    app.kubernetes.io/version: 88.0.0
+    chart: kube-prometheus-stack-88.0.0
     heritage: Helm
     release: kube-prometheus-stack
   name: kube-prometheus-stack-k8s.rules.container-memory-cache
@@ -83045,8 +83200,8 @@ metadata:
     app.kubernetes.io/instance: kube-prometheus-stack
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 87.21.0
-    chart: kube-prometheus-stack-87.21.0
+    app.kubernetes.io/version: 88.0.0
+    chart: kube-prometheus-stack-88.0.0
     heritage: Helm
     release: kube-prometheus-stack
   name: kube-prometheus-stack-k8s.rules.container-memory-rss
@@ -83070,8 +83225,8 @@ metadata:
     app.kubernetes.io/instance: kube-prometheus-stack
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 87.21.0
-    chart: kube-prometheus-stack-87.21.0
+    app.kubernetes.io/version: 88.0.0
+    chart: kube-prometheus-stack-88.0.0
     heritage: Helm
     release: kube-prometheus-stack
   name: kube-prometheus-stack-k8s.rules.container-memory-swap
@@ -83095,8 +83250,8 @@ metadata:
     app.kubernetes.io/instance: kube-prometheus-stack
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 87.21.0
-    chart: kube-prometheus-stack-87.21.0
+    app.kubernetes.io/version: 88.0.0
+    chart: kube-prometheus-stack-88.0.0
     heritage: Helm
     release: kube-prometheus-stack
   name: kube-prometheus-stack-k8s.rules.container-memory-working-set-by
@@ -83120,8 +83275,8 @@ metadata:
     app.kubernetes.io/instance: kube-prometheus-stack
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 87.21.0
-    chart: kube-prometheus-stack-87.21.0
+    app.kubernetes.io/version: 88.0.0
+    chart: kube-prometheus-stack-88.0.0
     heritage: Helm
     release: kube-prometheus-stack
   name: kube-prometheus-stack-k8s.rules.container-resource
@@ -83207,8 +83362,8 @@ metadata:
     app.kubernetes.io/instance: kube-prometheus-stack
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 87.21.0
-    chart: kube-prometheus-stack-87.21.0
+    app.kubernetes.io/version: 88.0.0
+    chart: kube-prometheus-stack-88.0.0
     heritage: Helm
     release: kube-prometheus-stack
   name: kube-prometheus-stack-k8s.rules.pod-owner
@@ -83353,8 +83508,8 @@ metadata:
     app.kubernetes.io/instance: kube-prometheus-stack
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 87.21.0
-    chart: kube-prometheus-stack-87.21.0
+    app.kubernetes.io/version: 88.0.0
+    chart: kube-prometheus-stack-88.0.0
     heritage: Helm
     release: kube-prometheus-stack
   name: kube-prometheus-stack-kube-apiserver-availability.rules
@@ -83475,8 +83630,8 @@ metadata:
     app.kubernetes.io/instance: kube-prometheus-stack
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 87.21.0
-    chart: kube-prometheus-stack-87.21.0
+    app.kubernetes.io/version: 88.0.0
+    chart: kube-prometheus-stack-88.0.0
     heritage: Helm
     release: kube-prometheus-stack
   name: kube-prometheus-stack-kube-apiserver-burnrate.rules
@@ -83795,8 +83950,8 @@ metadata:
     app.kubernetes.io/instance: kube-prometheus-stack
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 87.21.0
-    chart: kube-prometheus-stack-87.21.0
+    app.kubernetes.io/version: 88.0.0
+    chart: kube-prometheus-stack-88.0.0
     heritage: Helm
     release: kube-prometheus-stack
   name: kube-prometheus-stack-kube-apiserver-histogram.rules
@@ -83826,8 +83981,8 @@ metadata:
     app.kubernetes.io/instance: kube-prometheus-stack
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 87.21.0
-    chart: kube-prometheus-stack-87.21.0
+    app.kubernetes.io/version: 88.0.0
+    chart: kube-prometheus-stack-88.0.0
     heritage: Helm
     release: kube-prometheus-stack
   name: kube-prometheus-stack-kube-apiserver-slos
@@ -83905,8 +84060,8 @@ metadata:
     app.kubernetes.io/instance: kube-prometheus-stack
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 87.21.0
-    chart: kube-prometheus-stack-87.21.0
+    app.kubernetes.io/version: 88.0.0
+    chart: kube-prometheus-stack-88.0.0
     heritage: Helm
     release: kube-prometheus-stack
   name: kube-prometheus-stack-kube-prometheus-general.rules
@@ -83928,8 +84083,8 @@ metadata:
     app.kubernetes.io/instance: kube-prometheus-stack
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 87.21.0
-    chart: kube-prometheus-stack-87.21.0
+    app.kubernetes.io/version: 88.0.0
+    chart: kube-prometheus-stack-88.0.0
     heritage: Helm
     release: kube-prometheus-stack
   name: kube-prometheus-stack-kube-prometheus-node-recording.rules
@@ -83963,8 +84118,8 @@ metadata:
     app.kubernetes.io/instance: kube-prometheus-stack
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 87.21.0
-    chart: kube-prometheus-stack-87.21.0
+    app.kubernetes.io/version: 88.0.0
+    chart: kube-prometheus-stack-88.0.0
     heritage: Helm
     release: kube-prometheus-stack
   name: kube-prometheus-stack-kube-scheduler.rules
@@ -84027,8 +84182,8 @@ metadata:
     app.kubernetes.io/instance: kube-prometheus-stack
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 87.21.0
-    chart: kube-prometheus-stack-87.21.0
+    app.kubernetes.io/version: 88.0.0
+    chart: kube-prometheus-stack-88.0.0
     heritage: Helm
     release: kube-prometheus-stack
   name: kube-prometheus-stack-kube-state-metrics
@@ -84102,8 +84257,8 @@ metadata:
     app.kubernetes.io/instance: kube-prometheus-stack
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 87.21.0
-    chart: kube-prometheus-stack-87.21.0
+    app.kubernetes.io/version: 88.0.0
+    chart: kube-prometheus-stack-88.0.0
     heritage: Helm
     release: kube-prometheus-stack
   name: kube-prometheus-stack-kubelet.rules
@@ -84151,8 +84306,8 @@ metadata:
     app.kubernetes.io/instance: kube-prometheus-stack
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 87.21.0
-    chart: kube-prometheus-stack-87.21.0
+    app.kubernetes.io/version: 88.0.0
+    chart: kube-prometheus-stack-88.0.0
     heritage: Helm
     release: kube-prometheus-stack
   name: kube-prometheus-stack-kubernetes-apps
@@ -84472,8 +84627,8 @@ metadata:
     app.kubernetes.io/instance: kube-prometheus-stack
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 87.21.0
-    chart: kube-prometheus-stack-87.21.0
+    app.kubernetes.io/version: 88.0.0
+    chart: kube-prometheus-stack-88.0.0
     heritage: Helm
     release: kube-prometheus-stack
   name: kube-prometheus-stack-kubernetes-resources
@@ -84687,8 +84842,8 @@ metadata:
     app.kubernetes.io/instance: kube-prometheus-stack
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 87.21.0
-    chart: kube-prometheus-stack-87.21.0
+    app.kubernetes.io/version: 88.0.0
+    chart: kube-prometheus-stack-88.0.0
     heritage: Helm
     release: kube-prometheus-stack
   name: kube-prometheus-stack-kubernetes-storage
@@ -84813,8 +84968,8 @@ metadata:
     app.kubernetes.io/instance: kube-prometheus-stack
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 87.21.0
-    chart: kube-prometheus-stack-87.21.0
+    app.kubernetes.io/version: 88.0.0
+    chart: kube-prometheus-stack-88.0.0
     heritage: Helm
     release: kube-prometheus-stack
   name: kube-prometheus-stack-kubernetes-system-apiserver
@@ -84914,8 +85069,8 @@ metadata:
     app.kubernetes.io/instance: kube-prometheus-stack
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 87.21.0
-    chart: kube-prometheus-stack-87.21.0
+    app.kubernetes.io/version: 88.0.0
+    chart: kube-prometheus-stack-88.0.0
     heritage: Helm
     release: kube-prometheus-stack
   name: kube-prometheus-stack-kubernetes-system-controller-manager
@@ -84953,8 +85108,8 @@ metadata:
     app.kubernetes.io/instance: kube-prometheus-stack
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 87.21.0
-    chart: kube-prometheus-stack-87.21.0
+    app.kubernetes.io/version: 88.0.0
+    chart: kube-prometheus-stack-88.0.0
     heritage: Helm
     release: kube-prometheus-stack
   name: kube-prometheus-stack-kubernetes-system-kube-proxy
@@ -84990,8 +85145,8 @@ metadata:
     app.kubernetes.io/instance: kube-prometheus-stack
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 87.21.0
-    chart: kube-prometheus-stack-87.21.0
+    app.kubernetes.io/version: 88.0.0
+    chart: kube-prometheus-stack-88.0.0
     heritage: Helm
     release: kube-prometheus-stack
   name: kube-prometheus-stack-kubernetes-system-kubelet
@@ -85217,8 +85372,8 @@ metadata:
     app.kubernetes.io/instance: kube-prometheus-stack
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 87.21.0
-    chart: kube-prometheus-stack-87.21.0
+    app.kubernetes.io/version: 88.0.0
+    chart: kube-prometheus-stack-88.0.0
     heritage: Helm
     release: kube-prometheus-stack
   name: kube-prometheus-stack-kubernetes-system-scheduler
@@ -85255,8 +85410,8 @@ metadata:
     app.kubernetes.io/instance: kube-prometheus-stack
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 87.21.0
-    chart: kube-prometheus-stack-87.21.0
+    app.kubernetes.io/version: 88.0.0
+    chart: kube-prometheus-stack-88.0.0
     heritage: Helm
     release: kube-prometheus-stack
   name: kube-prometheus-stack-kubernetes-system
@@ -85300,8 +85455,8 @@ metadata:
     app.kubernetes.io/instance: kube-prometheus-stack
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 87.21.0
-    chart: kube-prometheus-stack-87.21.0
+    app.kubernetes.io/version: 88.0.0
+    chart: kube-prometheus-stack-88.0.0
     heritage: Helm
     release: kube-prometheus-stack
   name: kube-prometheus-stack-node-exporter.rules
@@ -85401,8 +85556,8 @@ metadata:
     app.kubernetes.io/instance: kube-prometheus-stack
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 87.21.0
-    chart: kube-prometheus-stack-87.21.0
+    app.kubernetes.io/version: 88.0.0
+    chart: kube-prometheus-stack-88.0.0
     heritage: Helm
     release: kube-prometheus-stack
   name: kube-prometheus-stack-node-exporter
@@ -85771,8 +85926,8 @@ metadata:
     app.kubernetes.io/instance: kube-prometheus-stack
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 87.21.0
-    chart: kube-prometheus-stack-87.21.0
+    app.kubernetes.io/version: 88.0.0
+    chart: kube-prometheus-stack-88.0.0
     heritage: Helm
     release: kube-prometheus-stack
   name: kube-prometheus-stack-node-network
@@ -85800,8 +85955,8 @@ metadata:
     app.kubernetes.io/instance: kube-prometheus-stack
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 87.21.0
-    chart: kube-prometheus-stack-87.21.0
+    app.kubernetes.io/version: 88.0.0
+    chart: kube-prometheus-stack-88.0.0
     heritage: Helm
     release: kube-prometheus-stack
   name: kube-prometheus-stack-node.rules
@@ -85855,8 +86010,8 @@ metadata:
     app.kubernetes.io/instance: kube-prometheus-stack
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 87.21.0
-    chart: kube-prometheus-stack-87.21.0
+    app.kubernetes.io/version: 88.0.0
+    chart: kube-prometheus-stack-88.0.0
     heritage: Helm
     release: kube-prometheus-stack
   name: kube-prometheus-stack-prometheus-operator
@@ -85969,8 +86124,8 @@ metadata:
     app.kubernetes.io/instance: kube-prometheus-stack
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 87.21.0
-    chart: kube-prometheus-stack-87.21.0
+    app.kubernetes.io/version: 88.0.0
+    chart: kube-prometheus-stack-88.0.0
     heritage: Helm
     release: kube-prometheus-stack
   name: kube-prometheus-stack-prometheus
@@ -86389,8 +86544,8 @@ metadata:
     app.kubernetes.io/instance: kube-prometheus-stack
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 87.21.0
-    chart: kube-prometheus-stack-87.21.0
+    app.kubernetes.io/version: 88.0.0
+    chart: kube-prometheus-stack-88.0.0
     heritage: Helm
     release: kube-prometheus-stack
   name: kube-prometheus-stack-alertmanager
@@ -86419,8 +86574,8 @@ metadata:
     app.kubernetes.io/instance: kube-prometheus-stack
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 87.21.0
-    chart: kube-prometheus-stack-87.21.0
+    app.kubernetes.io/version: 88.0.0
+    chart: kube-prometheus-stack-88.0.0
     heritage: Helm
     release: kube-prometheus-stack
   name: kube-prometheus-stack-coredns
@@ -86446,8 +86601,8 @@ metadata:
     app.kubernetes.io/instance: kube-prometheus-stack
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 87.21.0
-    chart: kube-prometheus-stack-87.21.0
+    app.kubernetes.io/version: 88.0.0
+    chart: kube-prometheus-stack-88.0.0
     heritage: Helm
     release: kube-prometheus-stack
   name: kube-prometheus-stack-apiserver
@@ -86484,8 +86639,8 @@ metadata:
     app.kubernetes.io/instance: kube-prometheus-stack
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 87.21.0
-    chart: kube-prometheus-stack-87.21.0
+    app.kubernetes.io/version: 88.0.0
+    chart: kube-prometheus-stack-88.0.0
     heritage: Helm
     release: kube-prometheus-stack
   name: kube-prometheus-stack-kube-controller-manager
@@ -86515,8 +86670,8 @@ metadata:
     app.kubernetes.io/instance: kube-prometheus-stack
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 87.21.0
-    chart: kube-prometheus-stack-87.21.0
+    app.kubernetes.io/version: 88.0.0
+    chart: kube-prometheus-stack-88.0.0
     heritage: Helm
     release: kube-prometheus-stack
   name: kube-prometheus-stack-kube-etcd
@@ -86542,8 +86697,8 @@ metadata:
     app.kubernetes.io/instance: kube-prometheus-stack
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 87.21.0
-    chart: kube-prometheus-stack-87.21.0
+    app.kubernetes.io/version: 88.0.0
+    chart: kube-prometheus-stack-88.0.0
     heritage: Helm
     release: kube-prometheus-stack
   name: kube-prometheus-stack-kube-proxy
@@ -86569,8 +86724,8 @@ metadata:
     app.kubernetes.io/instance: kube-prometheus-stack
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 87.21.0
-    chart: kube-prometheus-stack-87.21.0
+    app.kubernetes.io/version: 88.0.0
+    chart: kube-prometheus-stack-88.0.0
     heritage: Helm
     release: kube-prometheus-stack
   name: kube-prometheus-stack-kube-scheduler
@@ -86600,8 +86755,8 @@ metadata:
     app.kubernetes.io/instance: kube-prometheus-stack
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 87.21.0
-    chart: kube-prometheus-stack-87.21.0
+    app.kubernetes.io/version: 88.0.0
+    chart: kube-prometheus-stack-88.0.0
     heritage: Helm
     release: kube-prometheus-stack
   name: kube-prometheus-stack-kubelet
@@ -86714,8 +86869,8 @@ metadata:
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: kube-prometheus-stack-prometheus-operator
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 87.21.0
-    chart: kube-prometheus-stack-87.21.0
+    app.kubernetes.io/version: 88.0.0
+    chart: kube-prometheus-stack-88.0.0
     heritage: Helm
     release: kube-prometheus-stack
   name: kube-prometheus-stack-operator
@@ -86748,8 +86903,8 @@ metadata:
     app.kubernetes.io/instance: kube-prometheus-stack
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 87.21.0
-    chart: kube-prometheus-stack-87.21.0
+    app.kubernetes.io/version: 88.0.0
+    chart: kube-prometheus-stack-88.0.0
     heritage: Helm
     release: kube-prometheus-stack
   name: kube-prometheus-stack-prometheus
@@ -86779,8 +86934,8 @@ metadata:
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: kube-prometheus-stack-prometheus-operator
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 87.21.0
-    chart: kube-prometheus-stack-87.21.0
+    app.kubernetes.io/version: 88.0.0
+    chart: kube-prometheus-stack-88.0.0
     heritage: Helm
     release: kube-prometheus-stack
   name: kube-prometheus-stack-admission
@@ -86844,8 +86999,8 @@ metadata:
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: kube-prometheus-stack-prometheus-operator
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 87.21.0
-    chart: kube-prometheus-stack-87.21.0
+    app.kubernetes.io/version: 88.0.0
+    chart: kube-prometheus-stack-88.0.0
     heritage: Helm
     release: kube-prometheus-stack
   name: kube-prometheus-stack-admission
@@ -86864,8 +87019,8 @@ metadata:
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: kube-prometheus-stack-prometheus-operator
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 87.21.0
-    chart: kube-prometheus-stack-87.21.0
+    app.kubernetes.io/version: 88.0.0
+    chart: kube-prometheus-stack-88.0.0
     heritage: Helm
     release: kube-prometheus-stack
   name: kube-prometheus-stack-admission
@@ -86893,8 +87048,8 @@ metadata:
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: kube-prometheus-stack-prometheus-operator
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 87.21.0
-    chart: kube-prometheus-stack-87.21.0
+    app.kubernetes.io/version: 88.0.0
+    chart: kube-prometheus-stack-88.0.0
     heritage: Helm
     release: kube-prometheus-stack
   name: kube-prometheus-stack-admission
@@ -86920,8 +87075,8 @@ metadata:
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: kube-prometheus-stack-prometheus-operator
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 87.21.0
-    chart: kube-prometheus-stack-87.21.0
+    app.kubernetes.io/version: 88.0.0
+    chart: kube-prometheus-stack-88.0.0
     heritage: Helm
     release: kube-prometheus-stack
   name: kube-prometheus-stack-admission
@@ -86948,8 +87103,8 @@ metadata:
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: kube-prometheus-stack-prometheus-operator
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 87.21.0
-    chart: kube-prometheus-stack-87.21.0
+    app.kubernetes.io/version: 88.0.0
+    chart: kube-prometheus-stack-88.0.0
     heritage: Helm
     release: kube-prometheus-stack
   name: kube-prometheus-stack-admission
@@ -86976,8 +87131,8 @@ metadata:
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: kube-prometheus-stack-prometheus-operator
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 87.21.0
-    chart: kube-prometheus-stack-87.21.0
+    app.kubernetes.io/version: 88.0.0
+    chart: kube-prometheus-stack-88.0.0
     heritage: Helm
     release: kube-prometheus-stack
   name: kube-prometheus-stack-admission-create
@@ -86992,8 +87147,8 @@ spec:
         app.kubernetes.io/managed-by: Helm
         app.kubernetes.io/name: kube-prometheus-stack-prometheus-operator
         app.kubernetes.io/part-of: kube-prometheus-stack
-        app.kubernetes.io/version: 87.21.0
-        chart: kube-prometheus-stack-87.21.0
+        app.kubernetes.io/version: 88.0.0
+        chart: kube-prometheus-stack-88.0.0
         heritage: Helm
         release: kube-prometheus-stack
       name: kube-prometheus-stack-admission-create
@@ -87037,8 +87192,8 @@ metadata:
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: kube-prometheus-stack-prometheus-operator
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 87.21.0
-    chart: kube-prometheus-stack-87.21.0
+    app.kubernetes.io/version: 88.0.0
+    chart: kube-prometheus-stack-88.0.0
     heritage: Helm
     release: kube-prometheus-stack
   name: kube-prometheus-stack-admission-patch
@@ -87053,8 +87208,8 @@ spec:
         app.kubernetes.io/managed-by: Helm
         app.kubernetes.io/name: kube-prometheus-stack-prometheus-operator
         app.kubernetes.io/part-of: kube-prometheus-stack
-        app.kubernetes.io/version: 87.21.0
-        chart: kube-prometheus-stack-87.21.0
+        app.kubernetes.io/version: 88.0.0
+        chart: kube-prometheus-stack-88.0.0
         heritage: Helm
         release: kube-prometheus-stack
       name: kube-prometheus-stack-admission-patch
