@@ -1,7 +1,7 @@
 alertmanager:
   alertmanagerSpec:
     image:
-      tag: v0.33.1
+      tag: v0.34.0
   ingress:
     enabled: true
     hosts:
@@ -10,7 +10,7 @@ alertmanager:
       - /
 grafana:
   image:
-    tag: 13.1.3
+    tag: 13.2.0
   adminPassword: admin
   sidecar:
     dashboards:
@@ -35,7 +35,7 @@ grafana:
 prometheus:
   prometheusSpec:
     image:
-      tag: v3.13.2
+      tag: v3.14.0
   ingress:
     enabled: true
     hosts:
