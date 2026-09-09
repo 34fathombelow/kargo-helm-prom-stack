@@ -76,7 +76,8 @@ spec:
   # Update Argo CD application
   - uses: argocd-update
     retry:
-      errorThreshold: 1
+      errorThreshold: 3
+      timeout: 10m0s
     config:
       apps:
       - name: ${{ vars.chartName }}-${{ ctx.stage }}
