@@ -10,7 +10,7 @@ alertmanager:
       - /
 grafana:
   image:
-    tag: 13.2.1
+    tag: 13.2.2
   adminPassword: admin
   sidecar:
     dashboards:
