@@ -99225,7 +99225,7 @@ metadata:
   labels:
     app.kubernetes.io/instance: kube-prometheus-stack
     app.kubernetes.io/name: grafana
-    app.kubernetes.io/version: 13.2.1
+    app.kubernetes.io/version: 13.2.2
     helm.sh/chart: grafana-13.2.4
   name: kube-prometheus-stack-grafana
   namespace: monitoring
@@ -99327,7 +99327,7 @@ metadata:
     app.kubernetes.io/component: admin-secret
     app.kubernetes.io/instance: kube-prometheus-stack
     app.kubernetes.io/name: grafana
-    app.kubernetes.io/version: 13.2.1
+    app.kubernetes.io/version: 13.2.2
     helm.sh/chart: grafana-13.2.4
   name: kube-prometheus-stack-grafana
   namespace: monitoring
@@ -99391,7 +99391,7 @@ metadata:
   labels:
     app.kubernetes.io/instance: kube-prometheus-stack
     app.kubernetes.io/name: grafana
-    app.kubernetes.io/version: 13.2.1
+    app.kubernetes.io/version: 13.2.2
     helm.sh/chart: grafana-13.2.4
   name: kube-prometheus-stack-grafana-config-dashboards
   namespace: monitoring
@@ -99419,7 +99419,7 @@ metadata:
   labels:
     app.kubernetes.io/instance: kube-prometheus-stack
     app.kubernetes.io/name: grafana
-    app.kubernetes.io/version: 13.2.1
+    app.kubernetes.io/version: 13.2.2
     helm.sh/chart: grafana-13.2.4
   name: kube-prometheus-stack-grafana
   namespace: monitoring
@@ -102186,7 +102186,7 @@ metadata:
   labels:
     app.kubernetes.io/instance: kube-prometheus-stack
     app.kubernetes.io/name: grafana
-    app.kubernetes.io/version: 13.2.1
+    app.kubernetes.io/version: 13.2.2
     helm.sh/chart: grafana-13.2.4
   name: kube-prometheus-stack-grafana-clusterrole
 rules:
@@ -102619,7 +102619,7 @@ metadata:
   labels:
     app.kubernetes.io/instance: kube-prometheus-stack
     app.kubernetes.io/name: grafana
-    app.kubernetes.io/version: 13.2.1
+    app.kubernetes.io/version: 13.2.2
     helm.sh/chart: grafana-13.2.4
   name: kube-prometheus-stack-grafana-clusterrolebinding
 roleRef:
@@ -102705,7 +102705,7 @@ metadata:
   labels:
     app.kubernetes.io/instance: kube-prometheus-stack
     app.kubernetes.io/name: grafana
-    app.kubernetes.io/version: 13.2.1
+    app.kubernetes.io/version: 13.2.2
     helm.sh/chart: grafana-13.2.4
   name: kube-prometheus-stack-grafana
   namespace: monitoring
@@ -103127,7 +103127,7 @@ metadata:
   labels:
     app.kubernetes.io/instance: kube-prometheus-stack
     app.kubernetes.io/name: grafana
-    app.kubernetes.io/version: 13.2.1
+    app.kubernetes.io/version: 13.2.2
     helm.sh/chart: grafana-13.2.4
   name: kube-prometheus-stack-grafana
   namespace: monitoring
@@ -103150,7 +103150,7 @@ spec:
       labels:
         app.kubernetes.io/instance: kube-prometheus-stack
         app.kubernetes.io/name: grafana
-        app.kubernetes.io/version: 13.2.1
+        app.kubernetes.io/version: 13.2.2
         helm.sh/chart: grafana-13.2.4
     spec:
       automountServiceAccountToken: true
@@ -103256,7 +103256,7 @@ spec:
           value: /etc/grafana/provisioning
         - name: GF_UNIFIED_STORAGE_INDEX_PATH
           value: /var/lib/grafana-search/bleve
-        image: docker.io/grafana/grafana:13.2.1
+        image: docker.io/grafana/grafana:13.2.2
         imagePullPolicy: IfNotPresent
         livenessProbe:
           failureThreshold: 10
@@ -103537,7 +103537,7 @@ metadata:
   labels:
     app.kubernetes.io/instance: kube-prometheus-stack
     app.kubernetes.io/name: grafana
-    app.kubernetes.io/version: 13.2.1
+    app.kubernetes.io/version: 13.2.2
     helm.sh/chart: grafana-13.2.4
   name: kube-prometheus-stack-grafana
   namespace: monitoring
@@ -107599,7 +107599,7 @@ metadata:
   labels:
     app.kubernetes.io/instance: kube-prometheus-stack
     app.kubernetes.io/name: grafana
-    app.kubernetes.io/version: 13.2.1
+    app.kubernetes.io/version: 13.2.2
     helm.sh/chart: grafana-13.2.4
     release: kube-prometheus-stack
   name: kube-prometheus-stack-grafana
