@@ -6,8 +6,6 @@ metadata:
   annotations:
     argocd.argoproj.io/sync-wave: "1"
     argocd.argoproj.io/hook: PreSync
-  labels: 
-    test: something
 ---
 apiVersion: kargo.akuity.io/v1alpha1
 kind: ProjectConfig
