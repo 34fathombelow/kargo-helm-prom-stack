@@ -103855,7 +103855,7 @@ spec:
   alertmanagerConfigSelector: {}
   automountServiceAccountToken: true
   externalUrl: http://alertmanager-test.localhost/
-  image: quay.io/prometheus/alertmanager:v0.34.2
+  image: quay.io/prometheus/alertmanager:v0.35.0
   imagePullPolicy: IfNotPresent
   listenLocal: false
   logFormat: logfmt
@@ -103875,7 +103875,7 @@ spec:
     seccompProfile:
       type: RuntimeDefault
   serviceAccountName: kube-prometheus-stack-alertmanager
-  version: v0.34.2
+  version: v0.35.0
 ---
 apiVersion: admissionregistration.k8s.io/v1
 kind: MutatingWebhookConfiguration
