@@ -9374,7 +9374,7 @@ data:
                 "uid": "${datasource}"
               },
               "editorMode": "code",
-              "expr": "sum(kube_pod_container_resource_requests{resource=\"cpu\", cluster=\"$cluster\"} and on(namespace, pod) max by (namespace, pod) (kube_pod_status_phase{phase=\"Running\", cluster=\"$cluster\"} == 1)) / sum(machine_cpu_cores{cluster=\"$cluster\"})",
+              "expr": "sum((max by (namespace, pod) (kube_pod_resource_request{resource=\"cpu\", cluster=\"$cluster\", exported_namespace=\"\", exported_pod=\"\"}) or sum by (namespace, pod) (kube_pod_container_resource_requests{resource=\"cpu\", cluster=\"$cluster\"})) and on(namespace, pod) max by (namespace, pod) (kube_pod_status_phase{phase=\"Running\", cluster=\"$cluster\"} == 1)) / sum(machine_cpu_cores{cluster=\"$cluster\"})",
               "hide": false,
               "legendFormat": "Requests",
               "range": true,
@@ -9386,7 +9386,7 @@ data:
                 "uid": "${datasource}"
               },
               "editorMode": "code",
-              "expr": "sum(kube_pod_container_resource_limits{resource=\"cpu\", cluster=\"$cluster\"} and on(namespace, pod) max by (namespace, pod) (kube_pod_status_phase{phase=\"Running\", cluster=\"$cluster\"} == 1)) / sum(machine_cpu_cores{cluster=\"$cluster\"})",
+              "expr": "sum((max by (namespace, pod) (kube_pod_resource_limit{resource=\"cpu\", cluster=\"$cluster\", exported_namespace=\"\", exported_pod=\"\"}) or sum by (namespace, pod) (kube_pod_container_resource_limits{resource=\"cpu\", cluster=\"$cluster\"})) and on(namespace, pod) max by (namespace, pod) (kube_pod_status_phase{phase=\"Running\", cluster=\"$cluster\"} == 1)) / sum(machine_cpu_cores{cluster=\"$cluster\"})",
               "hide": false,
               "legendFormat": "Limits",
               "range": true,
@@ -9475,7 +9475,7 @@ data:
                 "uid": "${datasource}"
               },
               "editorMode": "code",
-              "expr": "sum(kube_pod_container_resource_requests{resource=\"memory\", cluster=\"$cluster\"} and on(namespace, pod) max by (namespace, pod) (kube_pod_status_phase{phase=\"Running\", cluster=\"$cluster\"} == 1)) / sum(machine_memory_bytes{cluster=\"$cluster\"})",
+              "expr": "sum((max by (namespace, pod) (kube_pod_resource_request{resource=\"memory\", cluster=\"$cluster\", exported_namespace=\"\", exported_pod=\"\"}) or sum by (namespace, pod) (kube_pod_container_resource_requests{resource=\"memory\", cluster=\"$cluster\"})) and on(namespace, pod) max by (namespace, pod) (kube_pod_status_phase{phase=\"Running\", cluster=\"$cluster\"} == 1)) / sum(machine_memory_bytes{cluster=\"$cluster\"})",
               "hide": false,
               "legendFormat": "Requests",
               "range": true,
@@ -9487,7 +9487,7 @@ data:
                 "uid": "${datasource}"
               },
               "editorMode": "code",
-              "expr": "sum(kube_pod_container_resource_limits{resource=\"memory\", cluster=\"$cluster\"} and on(namespace, pod) max by (namespace, pod) (kube_pod_status_phase{phase=\"Running\", cluster=\"$cluster\"} == 1)) / sum(machine_memory_bytes{cluster=\"$cluster\"})",
+              "expr": "sum((max by (namespace, pod) (kube_pod_resource_limit{resource=\"memory\", cluster=\"$cluster\", exported_namespace=\"\", exported_pod=\"\"}) or sum by (namespace, pod) (kube_pod_container_resource_limits{resource=\"memory\", cluster=\"$cluster\"})) and on(namespace, pod) max by (namespace, pod) (kube_pod_status_phase{phase=\"Running\", cluster=\"$cluster\"} == 1)) / sum(machine_memory_bytes{cluster=\"$cluster\"})",
               "hide": false,
               "legendFormat": "Limits",
               "range": true,
@@ -9937,7 +9937,7 @@ data:
                 "uid": "${datasource}"
               },
               "editorMode": "code",
-              "expr": "sum(kube_pod_container_resource_requests{resource=\"cpu\", cluster=\"$cluster\"} and on(namespace, pod) max by (namespace, pod) (kube_pod_status_phase{phase=\"Running\", cluster=\"$cluster\"} == 1))",
+              "expr": "sum((max by (namespace, pod) (kube_pod_resource_request{resource=\"cpu\", cluster=\"$cluster\", exported_namespace=\"\", exported_pod=\"\"}) or sum by (namespace, pod) (kube_pod_container_resource_requests{resource=\"cpu\", cluster=\"$cluster\"})) and on(namespace, pod) max by (namespace, pod) (kube_pod_status_phase{phase=\"Running\", cluster=\"$cluster\"} == 1))",
               "hide": false,
               "legendFormat": "Requests",
               "range": true,
@@ -9949,7 +9949,7 @@ data:
                 "uid": "${datasource}"
               },
               "editorMode": "code",
-              "expr": "sum(kube_pod_container_resource_limits{resource=\"cpu\", cluster=\"$cluster\"} and on(namespace, pod) max by (namespace, pod) (kube_pod_status_phase{phase=\"Running\", cluster=\"$cluster\"} == 1))",
+              "expr": "sum((max by (namespace, pod) (kube_pod_resource_limit{resource=\"cpu\", cluster=\"$cluster\", exported_namespace=\"\", exported_pod=\"\"}) or sum by (namespace, pod) (kube_pod_container_resource_limits{resource=\"cpu\", cluster=\"$cluster\"})) and on(namespace, pod) max by (namespace, pod) (kube_pod_status_phase{phase=\"Running\", cluster=\"$cluster\"} == 1))",
               "hide": false,
               "legendFormat": "Limits",
               "range": true,
@@ -10039,7 +10039,7 @@ data:
                 "uid": "${datasource}"
               },
               "editorMode": "code",
-              "expr": "sum(kube_pod_container_resource_requests{resource=\"memory\", cluster=\"$cluster\"} and on(namespace, pod) max by (namespace, pod) (kube_pod_status_phase{phase=\"Running\", cluster=\"$cluster\"} == 1))",
+              "expr": "sum((max by (namespace, pod) (kube_pod_resource_request{resource=\"memory\", cluster=\"$cluster\", exported_namespace=\"\", exported_pod=\"\"}) or sum by (namespace, pod) (kube_pod_container_resource_requests{resource=\"memory\", cluster=\"$cluster\"})) and on(namespace, pod) max by (namespace, pod) (kube_pod_status_phase{phase=\"Running\", cluster=\"$cluster\"} == 1))",
               "hide": false,
               "legendFormat": "Requests",
               "range": true,
@@ -10051,7 +10051,7 @@ data:
                 "uid": "${datasource}"
               },
               "editorMode": "code",
-              "expr": "sum(kube_pod_container_resource_limits{resource=\"memory\", cluster=\"$cluster\"} and on(namespace, pod) max by (namespace, pod) (kube_pod_status_phase{phase=\"Running\", cluster=\"$cluster\"} == 1))",
+              "expr": "sum((max by (namespace, pod) (kube_pod_resource_limit{resource=\"memory\", cluster=\"$cluster\", exported_namespace=\"\", exported_pod=\"\"}) or sum by (namespace, pod) (kube_pod_container_resource_limits{resource=\"memory\", cluster=\"$cluster\"})) and on(namespace, pod) max by (namespace, pod) (kube_pod_status_phase{phase=\"Running\", cluster=\"$cluster\"} == 1))",
               "hide": false,
               "legendFormat": "Limits",
               "range": true,
@@ -12316,7 +12316,7 @@ data:
       "timezone": "",
       "title": "Kubernetes / Views / Global",
       "uid": "k8s_views_global",
-      "version": 45,
+      "version": 46,
       "weekStart": ""
     }
   k8s-views-namespaces.json: |
@@ -12863,7 +12863,7 @@ data:
                 "uid": "${datasource}"
               },
               "editorMode": "code",
-              "expr": "sum(kube_pod_container_resource_requests{namespace=~\"$namespace\", resource=\"cpu\", cluster=\"$cluster\"} and on(namespace, pod) max by (namespace, pod) (kube_pod_status_phase{phase=\"Running\", namespace=~\"$namespace\", cluster=\"$cluster\"} == 1))",
+              "expr": "sum((max by (namespace, pod) (kube_pod_resource_request{namespace=~\"$namespace\", resource=\"cpu\", cluster=\"$cluster\", exported_namespace=\"\", exported_pod=\"\"}) or sum by (namespace, pod) (kube_pod_container_resource_requests{namespace=~\"$namespace\", resource=\"cpu\", cluster=\"$cluster\"})) and on(namespace, pod) max by (namespace, pod) (kube_pod_status_phase{phase=\"Running\", namespace=~\"$namespace\", cluster=\"$cluster\"} == 1))",
               "hide": false,
               "legendFormat": "Requests",
               "range": true,
@@ -12875,7 +12875,7 @@ data:
                 "uid": "${datasource}"
               },
               "editorMode": "code",
-              "expr": "sum(kube_pod_container_resource_limits{namespace=~\"$namespace\", resource=\"cpu\", cluster=\"$cluster\"} and on(namespace, pod) max by (namespace, pod) (kube_pod_status_phase{phase=\"Running\", namespace=~\"$namespace\", cluster=\"$cluster\"} == 1))",
+              "expr": "sum((max by (namespace, pod) (kube_pod_resource_limit{namespace=~\"$namespace\", resource=\"cpu\", cluster=\"$cluster\", exported_namespace=\"\", exported_pod=\"\"}) or sum by (namespace, pod) (kube_pod_container_resource_limits{namespace=~\"$namespace\", resource=\"cpu\", cluster=\"$cluster\"})) and on(namespace, pod) max by (namespace, pod) (kube_pod_status_phase{phase=\"Running\", namespace=~\"$namespace\", cluster=\"$cluster\"} == 1))",
               "hide": false,
               "legendFormat": "Limits",
               "range": true,
@@ -12965,7 +12965,7 @@ data:
                 "uid": "${datasource}"
               },
               "editorMode": "code",
-              "expr": "sum(kube_pod_container_resource_requests{namespace=~\"$namespace\", resource=\"memory\", cluster=\"$cluster\"} and on(namespace, pod) max by (namespace, pod) (kube_pod_status_phase{phase=\"Running\", namespace=~\"$namespace\", cluster=\"$cluster\"} == 1))",
+              "expr": "sum((max by (namespace, pod) (kube_pod_resource_request{namespace=~\"$namespace\", resource=\"memory\", cluster=\"$cluster\", exported_namespace=\"\", exported_pod=\"\"}) or sum by (namespace, pod) (kube_pod_container_resource_requests{namespace=~\"$namespace\", resource=\"memory\", cluster=\"$cluster\"})) and on(namespace, pod) max by (namespace, pod) (kube_pod_status_phase{phase=\"Running\", namespace=~\"$namespace\", cluster=\"$cluster\"} == 1))",
               "hide": false,
               "legendFormat": "Requests",
               "range": true,
@@ -12977,7 +12977,7 @@ data:
                 "uid": "${datasource}"
               },
               "editorMode": "code",
-              "expr": "sum(kube_pod_container_resource_limits{namespace=~\"$namespace\", resource=\"memory\", cluster=\"$cluster\"} and on(namespace, pod) max by (namespace, pod) (kube_pod_status_phase{phase=\"Running\", namespace=~\"$namespace\", cluster=\"$cluster\"} == 1))",
+              "expr": "sum((max by (namespace, pod) (kube_pod_resource_limit{namespace=~\"$namespace\", resource=\"memory\", cluster=\"$cluster\", exported_namespace=\"\", exported_pod=\"\"}) or sum by (namespace, pod) (kube_pod_container_resource_limits{namespace=~\"$namespace\", resource=\"memory\", cluster=\"$cluster\"})) and on(namespace, pod) max by (namespace, pod) (kube_pod_status_phase{phase=\"Running\", namespace=~\"$namespace\", cluster=\"$cluster\"} == 1))",
               "hide": false,
               "legendFormat": "Limits",
               "range": true,
@@ -15352,7 +15352,7 @@ data:
       "timezone": "",
       "title": "Kubernetes / Views / Namespaces",
       "uid": "k8s_views_ns",
-      "version": 46,
+      "version": 47,
       "weekStart": ""
     }
   k8s-views-nodes.json: |
@@ -20087,7 +20087,7 @@ data:
               },
               "editorMode": "code",
               "exemplar": false,
-              "expr": "sum(rate(container_cpu_usage_seconds_total{namespace=\"$namespace\", pod=~\"$pod\", image!=\"\", cluster=\"$cluster\"}[$__rate_interval])) / sum(kube_pod_container_resource_requests{namespace=\"$namespace\", pod=~\"$pod\", resource=\"cpu\", job=~\"$job\", cluster=\"$cluster\"} and on(namespace, pod) max by (namespace, pod) (kube_pod_status_phase{phase=\"Running\", namespace=\"$namespace\", pod=~\"$pod\", job=~\"$job\", cluster=\"$cluster\"} == 1))",
+              "expr": "sum(rate(container_cpu_usage_seconds_total{namespace=\"$namespace\", pod=~\"$pod\", image!=\"\", cluster=\"$cluster\"}[$__rate_interval])) / sum((max by (namespace, pod) (kube_pod_resource_request{namespace=\"$namespace\", pod=~\"$pod\", resource=\"cpu\", cluster=\"$cluster\", exported_namespace=\"\", exported_pod=\"\"}) or sum by (namespace, pod) (kube_pod_container_resource_requests{namespace=\"$namespace\", pod=~\"$pod\", resource=\"cpu\", job=~\"$job\", cluster=\"$cluster\"})) and on(namespace, pod) max by (namespace, pod) (kube_pod_status_phase{phase=\"Running\", namespace=\"$namespace\", pod=~\"$pod\", job=~\"$job\", cluster=\"$cluster\"} == 1))",
               "instant": true,
               "interval": "$resolution",
               "legendFormat": "Requests",
@@ -20160,7 +20160,7 @@ data:
               },
               "editorMode": "code",
               "exemplar": false,
-              "expr": "sum(rate(container_cpu_usage_seconds_total{namespace=\"$namespace\", pod=~\"$pod\", image!=\"\", cluster=\"$cluster\"}[$__rate_interval])) / sum(kube_pod_container_resource_limits{namespace=\"$namespace\", pod=~\"$pod\", resource=\"cpu\", job=~\"$job\", cluster=\"$cluster\"} and on(namespace, pod) max by (namespace, pod) (kube_pod_status_phase{phase=\"Running\", namespace=\"$namespace\", pod=~\"$pod\", job=~\"$job\", cluster=\"$cluster\"} == 1))",
+              "expr": "sum(rate(container_cpu_usage_seconds_total{namespace=\"$namespace\", pod=~\"$pod\", image!=\"\", cluster=\"$cluster\"}[$__rate_interval])) / sum((max by (namespace, pod) (kube_pod_resource_limit{namespace=\"$namespace\", pod=~\"$pod\", resource=\"cpu\", cluster=\"$cluster\", exported_namespace=\"\", exported_pod=\"\"}) or sum by (namespace, pod) (kube_pod_container_resource_limits{namespace=\"$namespace\", pod=~\"$pod\", resource=\"cpu\", job=~\"$job\", cluster=\"$cluster\"})) and on(namespace, pod) max by (namespace, pod) (kube_pod_status_phase{phase=\"Running\", namespace=\"$namespace\", pod=~\"$pod\", job=~\"$job\", cluster=\"$cluster\"} == 1))",
               "instant": true,
               "interval": "$resolution",
               "legendFormat": "Limits",
@@ -20237,7 +20237,7 @@ data:
               },
               "editorMode": "code",
               "exemplar": false,
-              "expr": "sum(container_memory_working_set_bytes{namespace=\"$namespace\", pod=~\"$pod\", image!=\"\", cluster=\"$cluster\"}) / sum(kube_pod_container_resource_requests{namespace=\"$namespace\", pod=~\"$pod\", resource=\"memory\", job=~\"$job\", cluster=\"$cluster\"} and on(namespace, pod) max by (namespace, pod) (kube_pod_status_phase{phase=\"Running\", namespace=\"$namespace\", pod=~\"$pod\", job=~\"$job\", cluster=\"$cluster\"} == 1))",
+              "expr": "sum(container_memory_working_set_bytes{namespace=\"$namespace\", pod=~\"$pod\", image!=\"\", cluster=\"$cluster\"}) / sum((max by (namespace, pod) (kube_pod_resource_request{namespace=\"$namespace\", pod=~\"$pod\", resource=\"memory\", cluster=\"$cluster\", exported_namespace=\"\", exported_pod=\"\"}) or sum by (namespace, pod) (kube_pod_container_resource_requests{namespace=\"$namespace\", pod=~\"$pod\", resource=\"memory\", job=~\"$job\", cluster=\"$cluster\"})) and on(namespace, pod) max by (namespace, pod) (kube_pod_status_phase{phase=\"Running\", namespace=\"$namespace\", pod=~\"$pod\", job=~\"$job\", cluster=\"$cluster\"} == 1))",
               "instant": true,
               "interval": "$resolution",
               "legendFormat": "Requests",
@@ -20310,7 +20310,7 @@ data:
               },
               "editorMode": "code",
               "exemplar": false,
-              "expr": "sum(container_memory_working_set_bytes{namespace=\"$namespace\", pod=~\"$pod\", image!=\"\", cluster=\"$cluster\"}) / sum(kube_pod_container_resource_limits{namespace=\"$namespace\", pod=~\"$pod\", resource=\"memory\", job=~\"$job\", cluster=\"$cluster\"} and on(namespace, pod) max by (namespace, pod) (kube_pod_status_phase{phase=\"Running\", namespace=\"$namespace\", pod=~\"$pod\", job=~\"$job\", cluster=\"$cluster\"} == 1)) ",
+              "expr": "sum(container_memory_working_set_bytes{namespace=\"$namespace\", pod=~\"$pod\", image!=\"\", cluster=\"$cluster\"}) / sum((max by (namespace, pod) (kube_pod_resource_limit{namespace=\"$namespace\", pod=~\"$pod\", resource=\"memory\", cluster=\"$cluster\", exported_namespace=\"\", exported_pod=\"\"}) or sum by (namespace, pod) (kube_pod_container_resource_limits{namespace=\"$namespace\", pod=~\"$pod\", resource=\"memory\", job=~\"$job\", cluster=\"$cluster\"})) and on(namespace, pod) max by (namespace, pod) (kube_pod_status_phase{phase=\"Running\", namespace=\"$namespace\", pod=~\"$pod\", job=~\"$job\", cluster=\"$cluster\"} == 1)) ",
               "instant": true,
               "interval": "$resolution",
               "legendFormat": "Limits",
@@ -20424,7 +20424,7 @@ data:
               },
               "editorMode": "code",
               "exemplar": false,
-              "expr": "sum(kube_pod_container_resource_requests{namespace=\"$namespace\", pod=~\"$pod\", resource=\"cpu\", job=~\"$job\", cluster=\"$cluster\"} and on(namespace, pod) max by (namespace, pod) (kube_pod_status_phase{phase=\"Running\", namespace=\"$namespace\", pod=~\"$pod\", job=~\"$job\", cluster=\"$cluster\"} == 1)) by (container)",
+              "expr": "sum(kube_pod_container_resource_requests{namespace=\"$namespace\", pod=~\"$pod\", resource=\"cpu\", job=~\"$job\", cluster=\"$cluster\"} and on(namespace, pod) max by (namespace, pod) (kube_pod_status_phase{phase=\"Running\", namespace=\"$namespace\", pod=~\"$pod\", job=~\"$job\", cluster=\"$cluster\"} == 1)) by (container) or label_replace(sum((max by (namespace, pod) (kube_pod_resource_request{namespace=\"$namespace\", pod=~\"$pod\", resource=\"cpu\", cluster=\"$cluster\", exported_namespace=\"\", exported_pod=\"\"}) or sum by (namespace, pod) (kube_pod_container_resource_requests{namespace=\"$namespace\", pod=~\"$pod\", resource=\"cpu\", job=~\"$job\", cluster=\"$cluster\"})) and on(namespace, pod) max by (namespace, pod) (kube_pod_status_phase{phase=\"Running\", namespace=\"$namespace\", pod=~\"$pod\", job=~\"$job\", cluster=\"$cluster\"} == 1)), \"container\", \"Pod total\", \"\", \"\")",
               "format": "table",
               "instant": true,
               "interval": "",
@@ -20439,7 +20439,7 @@ data:
               },
               "editorMode": "code",
               "exemplar": false,
-              "expr": "sum(kube_pod_container_resource_limits{namespace=\"$namespace\", pod=~\"$pod\", resource=\"cpu\", job=~\"$job\", cluster=\"$cluster\"} and on(namespace, pod) max by (namespace, pod) (kube_pod_status_phase{phase=\"Running\", namespace=\"$namespace\", pod=~\"$pod\", job=~\"$job\", cluster=\"$cluster\"} == 1)) by (container)",
+              "expr": "sum(kube_pod_container_resource_limits{namespace=\"$namespace\", pod=~\"$pod\", resource=\"cpu\", job=~\"$job\", cluster=\"$cluster\"} and on(namespace, pod) max by (namespace, pod) (kube_pod_status_phase{phase=\"Running\", namespace=\"$namespace\", pod=~\"$pod\", job=~\"$job\", cluster=\"$cluster\"} == 1)) by (container) or label_replace(sum((max by (namespace, pod) (kube_pod_resource_limit{namespace=\"$namespace\", pod=~\"$pod\", resource=\"cpu\", cluster=\"$cluster\", exported_namespace=\"\", exported_pod=\"\"}) or sum by (namespace, pod) (kube_pod_container_resource_limits{namespace=\"$namespace\", pod=~\"$pod\", resource=\"cpu\", job=~\"$job\", cluster=\"$cluster\"})) and on(namespace, pod) max by (namespace, pod) (kube_pod_status_phase{phase=\"Running\", namespace=\"$namespace\", pod=~\"$pod\", job=~\"$job\", cluster=\"$cluster\"} == 1)), \"container\", \"Pod total\", \"\", \"\")",
               "format": "table",
               "instant": true,
               "interval": "",
@@ -20454,7 +20454,7 @@ data:
               },
               "editorMode": "code",
               "exemplar": false,
-              "expr": "sum(kube_pod_container_resource_requests{namespace=\"$namespace\", pod=~\"$pod\", resource=\"memory\", job=~\"$job\", cluster=\"$cluster\"} and on(namespace, pod) max by (namespace, pod) (kube_pod_status_phase{phase=\"Running\", namespace=\"$namespace\", pod=~\"$pod\", job=~\"$job\", cluster=\"$cluster\"} == 1)) by (container)",
+              "expr": "sum(kube_pod_container_resource_requests{namespace=\"$namespace\", pod=~\"$pod\", resource=\"memory\", job=~\"$job\", cluster=\"$cluster\"} and on(namespace, pod) max by (namespace, pod) (kube_pod_status_phase{phase=\"Running\", namespace=\"$namespace\", pod=~\"$pod\", job=~\"$job\", cluster=\"$cluster\"} == 1)) by (container) or label_replace(sum((max by (namespace, pod) (kube_pod_resource_request{namespace=\"$namespace\", pod=~\"$pod\", resource=\"memory\", cluster=\"$cluster\", exported_namespace=\"\", exported_pod=\"\"}) or sum by (namespace, pod) (kube_pod_container_resource_requests{namespace=\"$namespace\", pod=~\"$pod\", resource=\"memory\", job=~\"$job\", cluster=\"$cluster\"})) and on(namespace, pod) max by (namespace, pod) (kube_pod_status_phase{phase=\"Running\", namespace=\"$namespace\", pod=~\"$pod\", job=~\"$job\", cluster=\"$cluster\"} == 1)), \"container\", \"Pod total\", \"\", \"\")",
               "format": "table",
               "instant": true,
               "interval": "",
@@ -20468,7 +20468,7 @@ data:
               },
               "editorMode": "code",
               "exemplar": false,
-              "expr": "sum(kube_pod_container_resource_limits{namespace=\"$namespace\", pod=~\"$pod\", resource=\"memory\", job=~\"$job\", cluster=\"$cluster\"} and on(namespace, pod) max by (namespace, pod) (kube_pod_status_phase{phase=\"Running\", namespace=\"$namespace\", pod=~\"$pod\", job=~\"$job\", cluster=\"$cluster\"} == 1)) by (container)",
+              "expr": "sum(kube_pod_container_resource_limits{namespace=\"$namespace\", pod=~\"$pod\", resource=\"memory\", job=~\"$job\", cluster=\"$cluster\"} and on(namespace, pod) max by (namespace, pod) (kube_pod_status_phase{phase=\"Running\", namespace=\"$namespace\", pod=~\"$pod\", job=~\"$job\", cluster=\"$cluster\"} == 1)) by (container) or label_replace(sum((max by (namespace, pod) (kube_pod_resource_limit{namespace=\"$namespace\", pod=~\"$pod\", resource=\"memory\", cluster=\"$cluster\", exported_namespace=\"\", exported_pod=\"\"}) or sum by (namespace, pod) (kube_pod_container_resource_limits{namespace=\"$namespace\", pod=~\"$pod\", resource=\"memory\", job=~\"$job\", cluster=\"$cluster\"})) and on(namespace, pod) max by (namespace, pod) (kube_pod_status_phase{phase=\"Running\", namespace=\"$namespace\", pod=~\"$pod\", job=~\"$job\", cluster=\"$cluster\"} == 1)), \"container\", \"Pod total\", \"\", \"\")",
               "format": "table",
               "instant": true,
               "interval": "",
@@ -20482,7 +20482,7 @@ data:
               },
               "editorMode": "code",
               "exemplar": false,
-              "expr": "sum(rate(container_cpu_usage_seconds_total{namespace=\"$namespace\", pod=~\"$pod\", image!=\"\", container!=\"\", cluster=\"$cluster\"}[$__rate_interval])) by (container)",
+              "expr": "sum(rate(container_cpu_usage_seconds_total{namespace=\"$namespace\", pod=~\"$pod\", image!=\"\", container!=\"\", cluster=\"$cluster\"}[$__rate_interval])) by (container) or label_replace(sum(rate(container_cpu_usage_seconds_total{namespace=\"$namespace\", pod=~\"$pod\", image!=\"\", container!=\"\", cluster=\"$cluster\"}[$__rate_interval])), \"container\", \"Pod total\", \"\", \"\")",
               "format": "table",
               "hide": false,
               "instant": true,
@@ -20497,7 +20497,7 @@ data:
               },
               "editorMode": "code",
               "exemplar": false,
-              "expr": "sum(container_memory_working_set_bytes{namespace=\"$namespace\", pod=~\"$pod\", image!=\"\", container!=\"\", cluster=\"$cluster\"}) by (container)",
+              "expr": "sum(container_memory_working_set_bytes{namespace=\"$namespace\", pod=~\"$pod\", image!=\"\", container!=\"\", cluster=\"$cluster\"}) by (container) or label_replace(sum(container_memory_working_set_bytes{namespace=\"$namespace\", pod=~\"$pod\", image!=\"\", container!=\"\", cluster=\"$cluster\"}), \"container\", \"Pod total\", \"\", \"\")",
               "format": "table",
               "hide": false,
               "instant": true,
@@ -20719,6 +20719,30 @@ data:
               "legendFormat": "{{ container }}  LIMITS",
               "range": true,
               "refId": "B"
+            },
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "${datasource}"
+              },
+              "editorMode": "code",
+              "expr": "sum(rate(container_cpu_usage_seconds_total{namespace=\"$namespace\", pod=~\"$pod\", image!=\"\", cluster=\"$cluster\"}[$__rate_interval])) / sum((max by (namespace, pod) (kube_pod_resource_request{namespace=\"$namespace\", pod=~\"$pod\", resource=\"cpu\", cluster=\"$cluster\", exported_namespace=\"\", exported_pod=\"\"}) or sum by (namespace, pod) (kube_pod_container_resource_requests{namespace=\"$namespace\", pod=~\"$pod\", resource=\"cpu\", job=~\"$job\", cluster=\"$cluster\"})) and on(namespace, pod) max by (namespace, pod) (kube_pod_status_phase{phase=\"Running\", namespace=\"$namespace\", pod=~\"$pod\", job=~\"$job\", cluster=\"$cluster\"} == 1))",
+              "hide": false,
+              "legendFormat": "Pod total REQUESTS",
+              "range": true,
+              "refId": "C"
+            },
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "${datasource}"
+              },
+              "editorMode": "code",
+              "expr": "sum(rate(container_cpu_usage_seconds_total{namespace=\"$namespace\", pod=~\"$pod\", image!=\"\", cluster=\"$cluster\"}[$__rate_interval])) / sum((max by (namespace, pod) (kube_pod_resource_limit{namespace=\"$namespace\", pod=~\"$pod\", resource=\"cpu\", cluster=\"$cluster\", exported_namespace=\"\", exported_pod=\"\"}) or sum by (namespace, pod) (kube_pod_container_resource_limits{namespace=\"$namespace\", pod=~\"$pod\", resource=\"cpu\", job=~\"$job\", cluster=\"$cluster\"})) and on(namespace, pod) max by (namespace, pod) (kube_pod_status_phase{phase=\"Running\", namespace=\"$namespace\", pod=~\"$pod\", job=~\"$job\", cluster=\"$cluster\"} == 1))",
+              "hide": false,
+              "legendFormat": "Pod total LIMITS",
+              "range": true,
+              "refId": "D"
             }
           ],
           "title": "CPU Usage / Requests & Limits by container",
@@ -20850,6 +20874,30 @@ data:
               "legendFormat": "{{ container }} LIMITS",
               "range": true,
               "refId": "B"
+            },
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "${datasource}"
+              },
+              "editorMode": "code",
+              "expr": "sum(container_memory_working_set_bytes{namespace=\"$namespace\", pod=~\"$pod\", image!=\"\", cluster=\"$cluster\"}) / sum((max by (namespace, pod) (kube_pod_resource_request{namespace=\"$namespace\", pod=~\"$pod\", resource=\"memory\", cluster=\"$cluster\", exported_namespace=\"\", exported_pod=\"\"}) or sum by (namespace, pod) (kube_pod_container_resource_requests{namespace=\"$namespace\", pod=~\"$pod\", resource=\"memory\", job=~\"$job\", cluster=\"$cluster\"})) and on(namespace, pod) max by (namespace, pod) (kube_pod_status_phase{phase=\"Running\", namespace=\"$namespace\", pod=~\"$pod\", job=~\"$job\", cluster=\"$cluster\"} == 1))",
+              "hide": false,
+              "legendFormat": "Pod total REQUESTS",
+              "range": true,
+              "refId": "C"
+            },
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "${datasource}"
+              },
+              "editorMode": "code",
+              "expr": "sum(container_memory_working_set_bytes{namespace=\"$namespace\", pod=~\"$pod\", image!=\"\", cluster=\"$cluster\"}) / sum((max by (namespace, pod) (kube_pod_resource_limit{namespace=\"$namespace\", pod=~\"$pod\", resource=\"memory\", cluster=\"$cluster\", exported_namespace=\"\", exported_pod=\"\"}) or sum by (namespace, pod) (kube_pod_container_resource_limits{namespace=\"$namespace\", pod=~\"$pod\", resource=\"memory\", job=~\"$job\", cluster=\"$cluster\"})) and on(namespace, pod) max by (namespace, pod) (kube_pod_status_phase{phase=\"Running\", namespace=\"$namespace\", pod=~\"$pod\", job=~\"$job\", cluster=\"$cluster\"} == 1))",
+              "hide": false,
+              "legendFormat": "Pod total LIMITS",
+              "range": true,
+              "refId": "D"
             }
           ],
           "title": "Memory Usage / Requests & Limits by container",
@@ -99453,7 +99501,7 @@ metadata:
     app.kubernetes.io/name: prometheus-node-exporter
     app.kubernetes.io/part-of: prometheus-node-exporter
     app.kubernetes.io/version: 1.13.1
-    helm.sh/chart: prometheus-node-exporter-5.2.0
+    helm.sh/chart: prometheus-node-exporter-6.0.0
     release: kube-prometheus-stack
   name: kube-prometheus-stack-prometheus-node-exporter
   namespace: monitoring
@@ -99469,8 +99517,8 @@ metadata:
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: kube-prometheus-stack-alertmanager
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 93.11.1
-    chart: kube-prometheus-stack-93.11.1
+    app.kubernetes.io/version: 94.1.0
+    chart: kube-prometheus-stack-94.1.0
     heritage: Helm
     release: kube-prometheus-stack
   name: kube-prometheus-stack-alertmanager
@@ -99487,8 +99535,8 @@ metadata:
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: kube-prometheus-stack-prometheus-operator
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 93.11.1
-    chart: kube-prometheus-stack-93.11.1
+    app.kubernetes.io/version: 94.1.0
+    chart: kube-prometheus-stack-94.1.0
     heritage: Helm
     release: kube-prometheus-stack
   name: kube-prometheus-stack-operator
@@ -99505,8 +99553,8 @@ metadata:
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: kube-prometheus-stack-prometheus
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 93.11.1
-    chart: kube-prometheus-stack-93.11.1
+    app.kubernetes.io/version: 94.1.0
+    chart: kube-prometheus-stack-94.1.0
     heritage: Helm
     release: kube-prometheus-stack
   name: kube-prometheus-stack-prometheus
@@ -99539,8 +99587,8 @@ metadata:
     app.kubernetes.io/instance: kube-prometheus-stack
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 93.11.1
-    chart: kube-prometheus-stack-93.11.1
+    app.kubernetes.io/version: 94.1.0
+    chart: kube-prometheus-stack-94.1.0
     heritage: Helm
     release: kube-prometheus-stack
   name: alertmanager-kube-prometheus-stack-alertmanager
@@ -99558,8 +99606,8 @@ metadata:
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: kube-prometheus-stack-prometheus
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 93.11.1
-    chart: kube-prometheus-stack-93.11.1
+    app.kubernetes.io/version: 94.1.0
+    chart: kube-prometheus-stack-94.1.0
     heritage: Helm
     release: kube-prometheus-stack
   name: kube-prometheus-stack-prometheus-token
@@ -99658,8 +99706,8 @@ metadata:
     app.kubernetes.io/instance: kube-prometheus-stack
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 93.11.1
-    chart: kube-prometheus-stack-93.11.1
+    app.kubernetes.io/version: 94.1.0
+    chart: kube-prometheus-stack-94.1.0
     grafana_datasource: "1"
     heritage: Helm
     release: kube-prometheus-stack
@@ -99701,8 +99749,8 @@ metadata:
     app.kubernetes.io/instance: kube-prometheus-stack
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 93.11.1
-    chart: kube-prometheus-stack-93.11.1
+    app.kubernetes.io/version: 94.1.0
+    chart: kube-prometheus-stack-94.1.0
     grafana_dashboard: "1"
     heritage: Helm
     release: kube-prometheus-stack
@@ -99784,8 +99832,8 @@ metadata:
     app.kubernetes.io/instance: kube-prometheus-stack
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 93.11.1
-    chart: kube-prometheus-stack-93.11.1
+    app.kubernetes.io/version: 94.1.0
+    chart: kube-prometheus-stack-94.1.0
     grafana_dashboard: "1"
     heritage: Helm
     release: kube-prometheus-stack
@@ -99897,8 +99945,8 @@ metadata:
     app.kubernetes.io/instance: kube-prometheus-stack
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 93.11.1
-    chart: kube-prometheus-stack-93.11.1
+    app.kubernetes.io/version: 94.1.0
+    chart: kube-prometheus-stack-94.1.0
     grafana_dashboard: "1"
     heritage: Helm
     release: kube-prometheus-stack
@@ -99954,8 +100002,8 @@ metadata:
     app.kubernetes.io/instance: kube-prometheus-stack
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 93.11.1
-    chart: kube-prometheus-stack-93.11.1
+    app.kubernetes.io/version: 94.1.0
+    chart: kube-prometheus-stack-94.1.0
     grafana_dashboard: "1"
     heritage: Helm
     release: kube-prometheus-stack
@@ -100019,8 +100067,8 @@ metadata:
     app.kubernetes.io/instance: kube-prometheus-stack
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 93.11.1
-    chart: kube-prometheus-stack-93.11.1
+    app.kubernetes.io/version: 94.1.0
+    chart: kube-prometheus-stack-94.1.0
     grafana_dashboard: "1"
     heritage: Helm
     release: kube-prometheus-stack
@@ -100059,8 +100107,8 @@ metadata:
     app.kubernetes.io/instance: kube-prometheus-stack
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 93.11.1
-    chart: kube-prometheus-stack-93.11.1
+    app.kubernetes.io/version: 94.1.0
+    chart: kube-prometheus-stack-94.1.0
     grafana_dashboard: "1"
     heritage: Helm
     release: kube-prometheus-stack
@@ -100165,8 +100213,8 @@ metadata:
     app.kubernetes.io/instance: kube-prometheus-stack
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 93.11.1
-    chart: kube-prometheus-stack-93.11.1
+    app.kubernetes.io/version: 94.1.0
+    chart: kube-prometheus-stack-94.1.0
     grafana_dashboard: "1"
     heritage: Helm
     release: kube-prometheus-stack
@@ -100348,8 +100396,8 @@ metadata:
     app.kubernetes.io/instance: kube-prometheus-stack
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 93.11.1
-    chart: kube-prometheus-stack-93.11.1
+    app.kubernetes.io/version: 94.1.0
+    chart: kube-prometheus-stack-94.1.0
     grafana_dashboard: "1"
     heritage: Helm
     release: kube-prometheus-stack
@@ -100428,8 +100476,8 @@ metadata:
     app.kubernetes.io/instance: kube-prometheus-stack
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 93.11.1
-    chart: kube-prometheus-stack-93.11.1
+    app.kubernetes.io/version: 94.1.0
+    chart: kube-prometheus-stack-94.1.0
     grafana_dashboard: "1"
     heritage: Helm
     release: kube-prometheus-stack
@@ -100622,8 +100670,8 @@ metadata:
     app.kubernetes.io/instance: kube-prometheus-stack
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 93.11.1
-    chart: kube-prometheus-stack-93.11.1
+    app.kubernetes.io/version: 94.1.0
+    chart: kube-prometheus-stack-94.1.0
     grafana_dashboard: "1"
     heritage: Helm
     release: kube-prometheus-stack
@@ -100718,8 +100766,8 @@ metadata:
     app.kubernetes.io/instance: kube-prometheus-stack
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 93.11.1
-    chart: kube-prometheus-stack-93.11.1
+    app.kubernetes.io/version: 94.1.0
+    chart: kube-prometheus-stack-94.1.0
     grafana_dashboard: "1"
     heritage: Helm
     release: kube-prometheus-stack
@@ -100759,8 +100807,8 @@ metadata:
     app.kubernetes.io/instance: kube-prometheus-stack
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 93.11.1
-    chart: kube-prometheus-stack-93.11.1
+    app.kubernetes.io/version: 94.1.0
+    chart: kube-prometheus-stack-94.1.0
     grafana_dashboard: "1"
     heritage: Helm
     release: kube-prometheus-stack
@@ -100940,8 +100988,8 @@ metadata:
     app.kubernetes.io/instance: kube-prometheus-stack
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 93.11.1
-    chart: kube-prometheus-stack-93.11.1
+    app.kubernetes.io/version: 94.1.0
+    chart: kube-prometheus-stack-94.1.0
     grafana_dashboard: "1"
     heritage: Helm
     release: kube-prometheus-stack
@@ -101137,8 +101185,8 @@ metadata:
     app.kubernetes.io/instance: kube-prometheus-stack
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 93.11.1
-    chart: kube-prometheus-stack-93.11.1
+    app.kubernetes.io/version: 94.1.0
+    chart: kube-prometheus-stack-94.1.0
     grafana_dashboard: "1"
     heritage: Helm
     release: kube-prometheus-stack
@@ -101342,8 +101390,8 @@ metadata:
     app.kubernetes.io/instance: kube-prometheus-stack
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 93.11.1
-    chart: kube-prometheus-stack-93.11.1
+    app.kubernetes.io/version: 94.1.0
+    chart: kube-prometheus-stack-94.1.0
     grafana_dashboard: "1"
     heritage: Helm
     release: kube-prometheus-stack
@@ -101456,8 +101504,8 @@ metadata:
     app.kubernetes.io/instance: kube-prometheus-stack
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 93.11.1
-    chart: kube-prometheus-stack-93.11.1
+    app.kubernetes.io/version: 94.1.0
+    chart: kube-prometheus-stack-94.1.0
     grafana_dashboard: "1"
     heritage: Helm
     release: kube-prometheus-stack
@@ -101546,8 +101594,8 @@ metadata:
     app.kubernetes.io/instance: kube-prometheus-stack
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 93.11.1
-    chart: kube-prometheus-stack-93.11.1
+    app.kubernetes.io/version: 94.1.0
+    chart: kube-prometheus-stack-94.1.0
     grafana_dashboard: "1"
     heritage: Helm
     release: kube-prometheus-stack
@@ -101689,8 +101737,8 @@ metadata:
     app.kubernetes.io/instance: kube-prometheus-stack
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 93.11.1
-    chart: kube-prometheus-stack-93.11.1
+    app.kubernetes.io/version: 94.1.0
+    chart: kube-prometheus-stack-94.1.0
     grafana_dashboard: "1"
     heritage: Helm
     release: kube-prometheus-stack
@@ -101740,8 +101788,8 @@ metadata:
     app.kubernetes.io/instance: kube-prometheus-stack
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 93.11.1
-    chart: kube-prometheus-stack-93.11.1
+    app.kubernetes.io/version: 94.1.0
+    chart: kube-prometheus-stack-94.1.0
     grafana_dashboard: "1"
     heritage: Helm
     release: kube-prometheus-stack
@@ -101786,8 +101834,8 @@ metadata:
     app.kubernetes.io/instance: kube-prometheus-stack
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 93.11.1
-    chart: kube-prometheus-stack-93.11.1
+    app.kubernetes.io/version: 94.1.0
+    chart: kube-prometheus-stack-94.1.0
     grafana_dashboard: "1"
     heritage: Helm
     release: kube-prometheus-stack
@@ -101853,8 +101901,8 @@ metadata:
     app.kubernetes.io/instance: kube-prometheus-stack
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 93.11.1
-    chart: kube-prometheus-stack-93.11.1
+    app.kubernetes.io/version: 94.1.0
+    chart: kube-prometheus-stack-94.1.0
     grafana_dashboard: "1"
     heritage: Helm
     release: kube-prometheus-stack
@@ -101928,8 +101976,8 @@ metadata:
     app.kubernetes.io/instance: kube-prometheus-stack
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 93.11.1
-    chart: kube-prometheus-stack-93.11.1
+    app.kubernetes.io/version: 94.1.0
+    chart: kube-prometheus-stack-94.1.0
     grafana_dashboard: "1"
     heritage: Helm
     release: kube-prometheus-stack
@@ -101999,8 +102047,8 @@ metadata:
     app.kubernetes.io/instance: kube-prometheus-stack
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 93.11.1
-    chart: kube-prometheus-stack-93.11.1
+    app.kubernetes.io/version: 94.1.0
+    chart: kube-prometheus-stack-94.1.0
     grafana_dashboard: "1"
     heritage: Helm
     release: kube-prometheus-stack
@@ -102053,8 +102101,8 @@ metadata:
     app.kubernetes.io/instance: kube-prometheus-stack
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 93.11.1
-    chart: kube-prometheus-stack-93.11.1
+    app.kubernetes.io/version: 94.1.0
+    chart: kube-prometheus-stack-94.1.0
     grafana_dashboard: "1"
     heritage: Helm
     release: kube-prometheus-stack
@@ -102104,8 +102152,8 @@ metadata:
     app.kubernetes.io/instance: kube-prometheus-stack
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 93.11.1
-    chart: kube-prometheus-stack-93.11.1
+    app.kubernetes.io/version: 94.1.0
+    chart: kube-prometheus-stack-94.1.0
     grafana_dashboard: "1"
     heritage: Helm
     release: kube-prometheus-stack
@@ -102160,8 +102208,8 @@ metadata:
     app.kubernetes.io/instance: kube-prometheus-stack
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 93.11.1
-    chart: kube-prometheus-stack-93.11.1
+    app.kubernetes.io/version: 94.1.0
+    chart: kube-prometheus-stack-94.1.0
     grafana_dashboard: "1"
     heritage: Helm
     release: kube-prometheus-stack
@@ -102219,8 +102267,8 @@ metadata:
     app.kubernetes.io/instance: kube-prometheus-stack
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 93.11.1
-    chart: kube-prometheus-stack-93.11.1
+    app.kubernetes.io/version: 94.1.0
+    chart: kube-prometheus-stack-94.1.0
     grafana_dashboard: "1"
     heritage: Helm
     release: kube-prometheus-stack
@@ -102288,8 +102336,8 @@ metadata:
     app.kubernetes.io/instance: kube-prometheus-stack
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 93.11.1
-    chart: kube-prometheus-stack-93.11.1
+    app.kubernetes.io/version: 94.1.0
+    chart: kube-prometheus-stack-94.1.0
     grafana_dashboard: "1"
     heritage: Helm
     release: kube-prometheus-stack
@@ -102368,8 +102416,8 @@ metadata:
     app.kubernetes.io/instance: kube-prometheus-stack
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 93.11.1
-    chart: kube-prometheus-stack-93.11.1
+    app.kubernetes.io/version: 94.1.0
+    chart: kube-prometheus-stack-94.1.0
     grafana_dashboard: "1"
     heritage: Helm
     release: kube-prometheus-stack
@@ -102617,8 +102665,8 @@ metadata:
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: kube-prometheus-stack-prometheus-operator
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 93.11.1
-    chart: kube-prometheus-stack-93.11.1
+    app.kubernetes.io/version: 94.1.0
+    chart: kube-prometheus-stack-94.1.0
     heritage: Helm
     release: kube-prometheus-stack
   name: kube-prometheus-stack-operator
@@ -102778,8 +102826,8 @@ metadata:
     app.kubernetes.io/instance: kube-prometheus-stack
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 93.11.1
-    chart: kube-prometheus-stack-93.11.1
+    app.kubernetes.io/version: 94.1.0
+    chart: kube-prometheus-stack-94.1.0
     heritage: Helm
     release: kube-prometheus-stack
   name: kube-prometheus-stack-prometheus
@@ -102868,8 +102916,8 @@ metadata:
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: kube-prometheus-stack-prometheus-operator
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 93.11.1
-    chart: kube-prometheus-stack-93.11.1
+    app.kubernetes.io/version: 94.1.0
+    chart: kube-prometheus-stack-94.1.0
     heritage: Helm
     release: kube-prometheus-stack
   name: kube-prometheus-stack-operator
@@ -102890,8 +102938,8 @@ metadata:
     app.kubernetes.io/instance: kube-prometheus-stack
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 93.11.1
-    chart: kube-prometheus-stack-93.11.1
+    app.kubernetes.io/version: 94.1.0
+    chart: kube-prometheus-stack-94.1.0
     heritage: Helm
     release: kube-prometheus-stack
   name: kube-prometheus-stack-prometheus
@@ -102960,7 +103008,7 @@ metadata:
     app.kubernetes.io/name: prometheus-node-exporter
     app.kubernetes.io/part-of: prometheus-node-exporter
     app.kubernetes.io/version: 1.13.1
-    helm.sh/chart: prometheus-node-exporter-5.2.0
+    helm.sh/chart: prometheus-node-exporter-6.0.0
     jobLabel: node-exporter
     release: kube-prometheus-stack
   name: kube-prometheus-stack-prometheus-node-exporter
@@ -102984,8 +103032,8 @@ metadata:
     app.kubernetes.io/instance: kube-prometheus-stack
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 93.11.1
-    chart: kube-prometheus-stack-93.11.1
+    app.kubernetes.io/version: 94.1.0
+    chart: kube-prometheus-stack-94.1.0
     heritage: Helm
     release: kube-prometheus-stack
     self-monitor: "true"
@@ -103015,8 +103063,8 @@ metadata:
     app.kubernetes.io/instance: kube-prometheus-stack
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 93.11.1
-    chart: kube-prometheus-stack-93.11.1
+    app.kubernetes.io/version: 94.1.0
+    chart: kube-prometheus-stack-94.1.0
     heritage: Helm
     jobLabel: coredns
     release: kube-prometheus-stack
@@ -103040,8 +103088,8 @@ metadata:
     app.kubernetes.io/instance: kube-prometheus-stack
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 93.11.1
-    chart: kube-prometheus-stack-93.11.1
+    app.kubernetes.io/version: 94.1.0
+    chart: kube-prometheus-stack-94.1.0
     heritage: Helm
     jobLabel: kube-controller-manager
     release: kube-prometheus-stack
@@ -103066,8 +103114,8 @@ metadata:
     app.kubernetes.io/instance: kube-prometheus-stack
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 93.11.1
-    chart: kube-prometheus-stack-93.11.1
+    app.kubernetes.io/version: 94.1.0
+    chart: kube-prometheus-stack-94.1.0
     heritage: Helm
     jobLabel: kube-etcd
     release: kube-prometheus-stack
@@ -103092,8 +103140,8 @@ metadata:
     app.kubernetes.io/instance: kube-prometheus-stack
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 93.11.1
-    chart: kube-prometheus-stack-93.11.1
+    app.kubernetes.io/version: 94.1.0
+    chart: kube-prometheus-stack-94.1.0
     heritage: Helm
     jobLabel: kube-proxy
     release: kube-prometheus-stack
@@ -103118,8 +103166,8 @@ metadata:
     app.kubernetes.io/instance: kube-prometheus-stack
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 93.11.1
-    chart: kube-prometheus-stack-93.11.1
+    app.kubernetes.io/version: 94.1.0
+    chart: kube-prometheus-stack-94.1.0
     heritage: Helm
     jobLabel: kube-scheduler
     release: kube-prometheus-stack
@@ -103146,8 +103194,8 @@ metadata:
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: kube-prometheus-stack-prometheus-operator
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 93.11.1
-    chart: kube-prometheus-stack-93.11.1
+    app.kubernetes.io/version: 94.1.0
+    chart: kube-prometheus-stack-94.1.0
     heritage: Helm
     release: kube-prometheus-stack
   name: kube-prometheus-stack-operator
@@ -103170,8 +103218,8 @@ metadata:
     app.kubernetes.io/instance: kube-prometheus-stack
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 93.11.1
-    chart: kube-prometheus-stack-93.11.1
+    app.kubernetes.io/version: 94.1.0
+    chart: kube-prometheus-stack-94.1.0
     heritage: Helm
     release: kube-prometheus-stack
     self-monitor: "true"
@@ -103203,7 +103251,7 @@ metadata:
     app.kubernetes.io/name: prometheus-node-exporter
     app.kubernetes.io/part-of: prometheus-node-exporter
     app.kubernetes.io/version: 1.13.1
-    helm.sh/chart: prometheus-node-exporter-5.2.0
+    helm.sh/chart: prometheus-node-exporter-6.0.0
     release: kube-prometheus-stack
   name: kube-prometheus-stack-prometheus-node-exporter
   namespace: monitoring
@@ -103642,8 +103690,8 @@ metadata:
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: kube-prometheus-stack-prometheus-operator
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 93.11.1
-    chart: kube-prometheus-stack-93.11.1
+    app.kubernetes.io/version: 94.1.0
+    chart: kube-prometheus-stack-94.1.0
     heritage: Helm
     release: kube-prometheus-stack
   name: kube-prometheus-stack-operator
@@ -103774,8 +103822,8 @@ metadata:
     app.kubernetes.io/instance: kube-prometheus-stack
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 93.11.1
-    chart: kube-prometheus-stack-93.11.1
+    app.kubernetes.io/version: 94.1.0
+    chart: kube-prometheus-stack-94.1.0
     heritage: Helm
     release: kube-prometheus-stack
   name: kube-prometheus-stack-alertmanager
@@ -103801,8 +103849,8 @@ metadata:
     app.kubernetes.io/instance: kube-prometheus-stack
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 93.11.1
-    chart: kube-prometheus-stack-93.11.1
+    app.kubernetes.io/version: 94.1.0
+    chart: kube-prometheus-stack-94.1.0
     heritage: Helm
     release: kube-prometheus-stack
   name: kube-prometheus-stack-prometheus
@@ -103828,8 +103876,8 @@ metadata:
     app.kubernetes.io/instance: kube-prometheus-stack
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 93.11.1
-    chart: kube-prometheus-stack-93.11.1
+    app.kubernetes.io/version: 94.1.0
+    chart: kube-prometheus-stack-94.1.0
     heritage: Helm
     release: kube-prometheus-stack
   name: kube-prometheus-stack-alertmanager
@@ -103853,7 +103901,7 @@ spec:
         weight: 100
   alertmanagerConfigNamespaceSelector: {}
   alertmanagerConfigSelector: {}
-  automountServiceAccountToken: true
+  automountServiceAccountToken: false
   externalUrl: http://alertmanager-test.localhost/
   image: quay.io/prometheus/alertmanager:v0.35.0
   imagePullPolicy: IfNotPresent
@@ -103887,8 +103935,8 @@ metadata:
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: kube-prometheus-stack-prometheus-operator
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 93.11.1
-    chart: kube-prometheus-stack-93.11.1
+    app.kubernetes.io/version: 94.1.0
+    chart: kube-prometheus-stack-94.1.0
     heritage: Helm
     release: kube-prometheus-stack
   name: kube-prometheus-stack-admission
@@ -103924,8 +103972,8 @@ metadata:
     app.kubernetes.io/instance: kube-prometheus-stack
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 93.11.1
-    chart: kube-prometheus-stack-93.11.1
+    app.kubernetes.io/version: 94.1.0
+    chart: kube-prometheus-stack-94.1.0
     heritage: Helm
     release: kube-prometheus-stack
   name: kube-prometheus-stack-prometheus
@@ -104013,8 +104061,8 @@ metadata:
     app.kubernetes.io/instance: kube-prometheus-stack
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 93.11.1
-    chart: kube-prometheus-stack-93.11.1
+    app.kubernetes.io/version: 94.1.0
+    chart: kube-prometheus-stack-94.1.0
     heritage: Helm
     release: kube-prometheus-stack
   name: kube-prometheus-stack-alertmanager.rules
@@ -104185,8 +104233,8 @@ metadata:
     app.kubernetes.io/instance: kube-prometheus-stack
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 93.11.1
-    chart: kube-prometheus-stack-93.11.1
+    app.kubernetes.io/version: 94.1.0
+    chart: kube-prometheus-stack-94.1.0
     heritage: Helm
     release: kube-prometheus-stack
   name: kube-prometheus-stack-config-reloaders
@@ -104216,8 +104264,8 @@ metadata:
     app.kubernetes.io/instance: kube-prometheus-stack
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 93.11.1
-    chart: kube-prometheus-stack-93.11.1
+    app.kubernetes.io/version: 94.1.0
+    chart: kube-prometheus-stack-94.1.0
     heritage: Helm
     release: kube-prometheus-stack
   name: kube-prometheus-stack-etcd
@@ -104431,8 +104479,8 @@ metadata:
     app.kubernetes.io/instance: kube-prometheus-stack
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 93.11.1
-    chart: kube-prometheus-stack-93.11.1
+    app.kubernetes.io/version: 94.1.0
+    chart: kube-prometheus-stack-94.1.0
     heritage: Helm
     release: kube-prometheus-stack
   name: kube-prometheus-stack-general.rules
@@ -104491,8 +104539,8 @@ metadata:
     app.kubernetes.io/instance: kube-prometheus-stack
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 93.11.1
-    chart: kube-prometheus-stack-93.11.1
+    app.kubernetes.io/version: 94.1.0
+    chart: kube-prometheus-stack-94.1.0
     heritage: Helm
     release: kube-prometheus-stack
   name: kube-prometheus-stack-k8s.rules.container-cpu-usage-seconds-tot
@@ -104524,8 +104572,8 @@ metadata:
     app.kubernetes.io/instance: kube-prometheus-stack
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 93.11.1
-    chart: kube-prometheus-stack-93.11.1
+    app.kubernetes.io/version: 94.1.0
+    chart: kube-prometheus-stack-94.1.0
     heritage: Helm
     release: kube-prometheus-stack
   name: kube-prometheus-stack-k8s.rules.container-memory-cache
@@ -104549,8 +104597,8 @@ metadata:
     app.kubernetes.io/instance: kube-prometheus-stack
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 93.11.1
-    chart: kube-prometheus-stack-93.11.1
+    app.kubernetes.io/version: 94.1.0
+    chart: kube-prometheus-stack-94.1.0
     heritage: Helm
     release: kube-prometheus-stack
   name: kube-prometheus-stack-k8s.rules.container-memory-rss
@@ -104574,8 +104622,8 @@ metadata:
     app.kubernetes.io/instance: kube-prometheus-stack
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 93.11.1
-    chart: kube-prometheus-stack-93.11.1
+    app.kubernetes.io/version: 94.1.0
+    chart: kube-prometheus-stack-94.1.0
     heritage: Helm
     release: kube-prometheus-stack
   name: kube-prometheus-stack-k8s.rules.container-memory-swap
@@ -104599,8 +104647,8 @@ metadata:
     app.kubernetes.io/instance: kube-prometheus-stack
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 93.11.1
-    chart: kube-prometheus-stack-93.11.1
+    app.kubernetes.io/version: 94.1.0
+    chart: kube-prometheus-stack-94.1.0
     heritage: Helm
     release: kube-prometheus-stack
   name: kube-prometheus-stack-k8s.rules.container-memory-working-set-by
@@ -104624,8 +104672,8 @@ metadata:
     app.kubernetes.io/instance: kube-prometheus-stack
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 93.11.1
-    chart: kube-prometheus-stack-93.11.1
+    app.kubernetes.io/version: 94.1.0
+    chart: kube-prometheus-stack-94.1.0
     heritage: Helm
     release: kube-prometheus-stack
   name: kube-prometheus-stack-k8s.rules.container-resource
@@ -104711,8 +104759,8 @@ metadata:
     app.kubernetes.io/instance: kube-prometheus-stack
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 93.11.1
-    chart: kube-prometheus-stack-93.11.1
+    app.kubernetes.io/version: 94.1.0
+    chart: kube-prometheus-stack-94.1.0
     heritage: Helm
     release: kube-prometheus-stack
   name: kube-prometheus-stack-k8s.rules.pod-owner
@@ -104857,8 +104905,8 @@ metadata:
     app.kubernetes.io/instance: kube-prometheus-stack
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 93.11.1
-    chart: kube-prometheus-stack-93.11.1
+    app.kubernetes.io/version: 94.1.0
+    chart: kube-prometheus-stack-94.1.0
     heritage: Helm
     release: kube-prometheus-stack
   name: kube-prometheus-stack-kube-apiserver-availability.rules
@@ -104979,8 +105027,8 @@ metadata:
     app.kubernetes.io/instance: kube-prometheus-stack
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 93.11.1
-    chart: kube-prometheus-stack-93.11.1
+    app.kubernetes.io/version: 94.1.0
+    chart: kube-prometheus-stack-94.1.0
     heritage: Helm
     release: kube-prometheus-stack
   name: kube-prometheus-stack-kube-apiserver-burnrate.rules
@@ -105237,8 +105285,8 @@ metadata:
     app.kubernetes.io/instance: kube-prometheus-stack
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 93.11.1
-    chart: kube-prometheus-stack-93.11.1
+    app.kubernetes.io/version: 94.1.0
+    chart: kube-prometheus-stack-94.1.0
     heritage: Helm
     release: kube-prometheus-stack
   name: kube-prometheus-stack-kube-apiserver-histogram.rules
@@ -105268,8 +105316,8 @@ metadata:
     app.kubernetes.io/instance: kube-prometheus-stack
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 93.11.1
-    chart: kube-prometheus-stack-93.11.1
+    app.kubernetes.io/version: 94.1.0
+    chart: kube-prometheus-stack-94.1.0
     heritage: Helm
     release: kube-prometheus-stack
   name: kube-prometheus-stack-kube-apiserver-slos
@@ -105347,8 +105395,8 @@ metadata:
     app.kubernetes.io/instance: kube-prometheus-stack
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 93.11.1
-    chart: kube-prometheus-stack-93.11.1
+    app.kubernetes.io/version: 94.1.0
+    chart: kube-prometheus-stack-94.1.0
     heritage: Helm
     release: kube-prometheus-stack
   name: kube-prometheus-stack-kube-prometheus-general.rules
@@ -105370,8 +105418,8 @@ metadata:
     app.kubernetes.io/instance: kube-prometheus-stack
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 93.11.1
-    chart: kube-prometheus-stack-93.11.1
+    app.kubernetes.io/version: 94.1.0
+    chart: kube-prometheus-stack-94.1.0
     heritage: Helm
     release: kube-prometheus-stack
   name: kube-prometheus-stack-kube-prometheus-node-recording.rules
@@ -105405,8 +105453,8 @@ metadata:
     app.kubernetes.io/instance: kube-prometheus-stack
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 93.11.1
-    chart: kube-prometheus-stack-93.11.1
+    app.kubernetes.io/version: 94.1.0
+    chart: kube-prometheus-stack-94.1.0
     heritage: Helm
     release: kube-prometheus-stack
   name: kube-prometheus-stack-kube-scheduler.rules
@@ -105469,8 +105517,8 @@ metadata:
     app.kubernetes.io/instance: kube-prometheus-stack
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 93.11.1
-    chart: kube-prometheus-stack-93.11.1
+    app.kubernetes.io/version: 94.1.0
+    chart: kube-prometheus-stack-94.1.0
     heritage: Helm
     release: kube-prometheus-stack
   name: kube-prometheus-stack-kube-state-metrics
@@ -105544,8 +105592,8 @@ metadata:
     app.kubernetes.io/instance: kube-prometheus-stack
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 93.11.1
-    chart: kube-prometheus-stack-93.11.1
+    app.kubernetes.io/version: 94.1.0
+    chart: kube-prometheus-stack-94.1.0
     heritage: Helm
     release: kube-prometheus-stack
   name: kube-prometheus-stack-kubelet.rules
@@ -105593,8 +105641,8 @@ metadata:
     app.kubernetes.io/instance: kube-prometheus-stack
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 93.11.1
-    chart: kube-prometheus-stack-93.11.1
+    app.kubernetes.io/version: 94.1.0
+    chart: kube-prometheus-stack-94.1.0
     heritage: Helm
     release: kube-prometheus-stack
   name: kube-prometheus-stack-kubernetes-apps
@@ -105919,8 +105967,8 @@ metadata:
     app.kubernetes.io/instance: kube-prometheus-stack
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 93.11.1
-    chart: kube-prometheus-stack-93.11.1
+    app.kubernetes.io/version: 94.1.0
+    chart: kube-prometheus-stack-94.1.0
     heritage: Helm
     release: kube-prometheus-stack
   name: kube-prometheus-stack-kubernetes-resources
@@ -106134,8 +106182,8 @@ metadata:
     app.kubernetes.io/instance: kube-prometheus-stack
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 93.11.1
-    chart: kube-prometheus-stack-93.11.1
+    app.kubernetes.io/version: 94.1.0
+    chart: kube-prometheus-stack-94.1.0
     heritage: Helm
     release: kube-prometheus-stack
   name: kube-prometheus-stack-kubernetes-storage
@@ -106260,8 +106308,8 @@ metadata:
     app.kubernetes.io/instance: kube-prometheus-stack
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 93.11.1
-    chart: kube-prometheus-stack-93.11.1
+    app.kubernetes.io/version: 94.1.0
+    chart: kube-prometheus-stack-94.1.0
     heritage: Helm
     release: kube-prometheus-stack
   name: kube-prometheus-stack-kubernetes-system-apiserver
@@ -106361,8 +106409,8 @@ metadata:
     app.kubernetes.io/instance: kube-prometheus-stack
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 93.11.1
-    chart: kube-prometheus-stack-93.11.1
+    app.kubernetes.io/version: 94.1.0
+    chart: kube-prometheus-stack-94.1.0
     heritage: Helm
     release: kube-prometheus-stack
   name: kube-prometheus-stack-kubernetes-system-controller-manager
@@ -106400,8 +106448,8 @@ metadata:
     app.kubernetes.io/instance: kube-prometheus-stack
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 93.11.1
-    chart: kube-prometheus-stack-93.11.1
+    app.kubernetes.io/version: 94.1.0
+    chart: kube-prometheus-stack-94.1.0
     heritage: Helm
     release: kube-prometheus-stack
   name: kube-prometheus-stack-kubernetes-system-kube-proxy
@@ -106437,8 +106485,8 @@ metadata:
     app.kubernetes.io/instance: kube-prometheus-stack
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 93.11.1
-    chart: kube-prometheus-stack-93.11.1
+    app.kubernetes.io/version: 94.1.0
+    chart: kube-prometheus-stack-94.1.0
     heritage: Helm
     release: kube-prometheus-stack
   name: kube-prometheus-stack-kubernetes-system-kubelet
@@ -106664,8 +106712,8 @@ metadata:
     app.kubernetes.io/instance: kube-prometheus-stack
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 93.11.1
-    chart: kube-prometheus-stack-93.11.1
+    app.kubernetes.io/version: 94.1.0
+    chart: kube-prometheus-stack-94.1.0
     heritage: Helm
     release: kube-prometheus-stack
   name: kube-prometheus-stack-kubernetes-system-scheduler
@@ -106702,8 +106750,8 @@ metadata:
     app.kubernetes.io/instance: kube-prometheus-stack
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 93.11.1
-    chart: kube-prometheus-stack-93.11.1
+    app.kubernetes.io/version: 94.1.0
+    chart: kube-prometheus-stack-94.1.0
     heritage: Helm
     release: kube-prometheus-stack
   name: kube-prometheus-stack-kubernetes-system
@@ -106747,8 +106795,8 @@ metadata:
     app.kubernetes.io/instance: kube-prometheus-stack
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 93.11.1
-    chart: kube-prometheus-stack-93.11.1
+    app.kubernetes.io/version: 94.1.0
+    chart: kube-prometheus-stack-94.1.0
     heritage: Helm
     release: kube-prometheus-stack
   name: kube-prometheus-stack-node-exporter.rules
@@ -106848,8 +106896,8 @@ metadata:
     app.kubernetes.io/instance: kube-prometheus-stack
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 93.11.1
-    chart: kube-prometheus-stack-93.11.1
+    app.kubernetes.io/version: 94.1.0
+    chart: kube-prometheus-stack-94.1.0
     heritage: Helm
     release: kube-prometheus-stack
   name: kube-prometheus-stack-node-exporter
@@ -107218,8 +107266,8 @@ metadata:
     app.kubernetes.io/instance: kube-prometheus-stack
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 93.11.1
-    chart: kube-prometheus-stack-93.11.1
+    app.kubernetes.io/version: 94.1.0
+    chart: kube-prometheus-stack-94.1.0
     heritage: Helm
     release: kube-prometheus-stack
   name: kube-prometheus-stack-node-network
@@ -107247,8 +107295,8 @@ metadata:
     app.kubernetes.io/instance: kube-prometheus-stack
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 93.11.1
-    chart: kube-prometheus-stack-93.11.1
+    app.kubernetes.io/version: 94.1.0
+    chart: kube-prometheus-stack-94.1.0
     heritage: Helm
     release: kube-prometheus-stack
   name: kube-prometheus-stack-node.rules
@@ -107302,8 +107350,8 @@ metadata:
     app.kubernetes.io/instance: kube-prometheus-stack
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 93.11.1
-    chart: kube-prometheus-stack-93.11.1
+    app.kubernetes.io/version: 94.1.0
+    chart: kube-prometheus-stack-94.1.0
     heritage: Helm
     release: kube-prometheus-stack
   name: kube-prometheus-stack-prometheus-operator
@@ -107416,8 +107464,8 @@ metadata:
     app.kubernetes.io/instance: kube-prometheus-stack
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 93.11.1
-    chart: kube-prometheus-stack-93.11.1
+    app.kubernetes.io/version: 94.1.0
+    chart: kube-prometheus-stack-94.1.0
     heritage: Helm
     release: kube-prometheus-stack
   name: kube-prometheus-stack-prometheus
@@ -107811,7 +107859,7 @@ metadata:
     app.kubernetes.io/name: prometheus-node-exporter
     app.kubernetes.io/part-of: prometheus-node-exporter
     app.kubernetes.io/version: 1.13.1
-    helm.sh/chart: prometheus-node-exporter-5.2.0
+    helm.sh/chart: prometheus-node-exporter-6.0.0
     release: kube-prometheus-stack
   name: kube-prometheus-stack-prometheus-node-exporter
   namespace: monitoring
@@ -107836,8 +107884,8 @@ metadata:
     app.kubernetes.io/instance: kube-prometheus-stack
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 93.11.1
-    chart: kube-prometheus-stack-93.11.1
+    app.kubernetes.io/version: 94.1.0
+    chart: kube-prometheus-stack-94.1.0
     heritage: Helm
     release: kube-prometheus-stack
   name: kube-prometheus-stack-alertmanager
@@ -107866,8 +107914,8 @@ metadata:
     app.kubernetes.io/instance: kube-prometheus-stack
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 93.11.1
-    chart: kube-prometheus-stack-93.11.1
+    app.kubernetes.io/version: 94.1.0
+    chart: kube-prometheus-stack-94.1.0
     heritage: Helm
     release: kube-prometheus-stack
   name: kube-prometheus-stack-coredns
@@ -107897,8 +107945,8 @@ metadata:
     app.kubernetes.io/instance: kube-prometheus-stack
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 93.11.1
-    chart: kube-prometheus-stack-93.11.1
+    app.kubernetes.io/version: 94.1.0
+    chart: kube-prometheus-stack-94.1.0
     heritage: Helm
     release: kube-prometheus-stack
   name: kube-prometheus-stack-apiserver
@@ -107947,8 +107995,8 @@ metadata:
     app.kubernetes.io/instance: kube-prometheus-stack
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 93.11.1
-    chart: kube-prometheus-stack-93.11.1
+    app.kubernetes.io/version: 94.1.0
+    chart: kube-prometheus-stack-94.1.0
     heritage: Helm
     release: kube-prometheus-stack
   name: kube-prometheus-stack-kube-controller-manager
@@ -107985,8 +108033,8 @@ metadata:
     app.kubernetes.io/instance: kube-prometheus-stack
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 93.11.1
-    chart: kube-prometheus-stack-93.11.1
+    app.kubernetes.io/version: 94.1.0
+    chart: kube-prometheus-stack-94.1.0
     heritage: Helm
     release: kube-prometheus-stack
   name: kube-prometheus-stack-kube-etcd
@@ -108016,8 +108064,8 @@ metadata:
     app.kubernetes.io/instance: kube-prometheus-stack
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 93.11.1
-    chart: kube-prometheus-stack-93.11.1
+    app.kubernetes.io/version: 94.1.0
+    chart: kube-prometheus-stack-94.1.0
     heritage: Helm
     release: kube-prometheus-stack
   name: kube-prometheus-stack-kube-proxy
@@ -108047,8 +108095,8 @@ metadata:
     app.kubernetes.io/instance: kube-prometheus-stack
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 93.11.1
-    chart: kube-prometheus-stack-93.11.1
+    app.kubernetes.io/version: 94.1.0
+    chart: kube-prometheus-stack-94.1.0
     heritage: Helm
     release: kube-prometheus-stack
   name: kube-prometheus-stack-kube-scheduler
@@ -108085,8 +108133,8 @@ metadata:
     app.kubernetes.io/instance: kube-prometheus-stack
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 93.11.1
-    chart: kube-prometheus-stack-93.11.1
+    app.kubernetes.io/version: 94.1.0
+    chart: kube-prometheus-stack-94.1.0
     heritage: Helm
     release: kube-prometheus-stack
   name: kube-prometheus-stack-kubelet
@@ -108220,8 +108268,8 @@ metadata:
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: kube-prometheus-stack-prometheus-operator
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 93.11.1
-    chart: kube-prometheus-stack-93.11.1
+    app.kubernetes.io/version: 94.1.0
+    chart: kube-prometheus-stack-94.1.0
     heritage: Helm
     release: kube-prometheus-stack
   name: kube-prometheus-stack-operator
@@ -108254,8 +108302,8 @@ metadata:
     app.kubernetes.io/instance: kube-prometheus-stack
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 93.11.1
-    chart: kube-prometheus-stack-93.11.1
+    app.kubernetes.io/version: 94.1.0
+    chart: kube-prometheus-stack-94.1.0
     heritage: Helm
     release: kube-prometheus-stack
   name: kube-prometheus-stack-prometheus
@@ -108285,8 +108333,8 @@ metadata:
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: kube-prometheus-stack-prometheus-operator
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 93.11.1
-    chart: kube-prometheus-stack-93.11.1
+    app.kubernetes.io/version: 94.1.0
+    chart: kube-prometheus-stack-94.1.0
     heritage: Helm
     release: kube-prometheus-stack
   name: kube-prometheus-stack-admission
@@ -108364,8 +108412,8 @@ metadata:
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: kube-prometheus-stack-prometheus-operator
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 93.11.1
-    chart: kube-prometheus-stack-93.11.1
+    app.kubernetes.io/version: 94.1.0
+    chart: kube-prometheus-stack-94.1.0
     heritage: Helm
     release: kube-prometheus-stack
   name: kube-prometheus-stack-admission
@@ -108406,14 +108454,16 @@ metadata:
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: kube-prometheus-stack-prometheus-operator
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 93.11.1
-    chart: kube-prometheus-stack-93.11.1
+    app.kubernetes.io/version: 94.1.0
+    chart: kube-prometheus-stack-94.1.0
     heritage: Helm
     release: kube-prometheus-stack
   name: kube-prometheus-stack-admission
 rules:
 - apiGroups:
   - admissionregistration.k8s.io
+  resourceNames:
+  - kube-prometheus-stack-admission
   resources:
   - validatingwebhookconfigurations
   - mutatingwebhookconfigurations
@@ -108435,8 +108485,8 @@ metadata:
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: kube-prometheus-stack-prometheus-operator
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 93.11.1
-    chart: kube-prometheus-stack-93.11.1
+    app.kubernetes.io/version: 94.1.0
+    chart: kube-prometheus-stack-94.1.0
     heritage: Helm
     release: kube-prometheus-stack
   name: kube-prometheus-stack-admission
@@ -108462,8 +108512,8 @@ metadata:
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: kube-prometheus-stack-prometheus-operator
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 93.11.1
-    chart: kube-prometheus-stack-93.11.1
+    app.kubernetes.io/version: 94.1.0
+    chart: kube-prometheus-stack-94.1.0
     heritage: Helm
     release: kube-prometheus-stack
   name: kube-prometheus-stack-admission
@@ -108474,7 +108524,6 @@ rules:
   resources:
   - secrets
   verbs:
-  - get
   - create
 - apiGroups:
   - ""
@@ -108483,6 +108532,7 @@ rules:
   resources:
   - secrets
   verbs:
+  - get
   - delete
 ---
 apiVersion: rbac.authorization.k8s.io/v1
@@ -108498,8 +108548,8 @@ metadata:
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: kube-prometheus-stack-prometheus-operator
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 93.11.1
-    chart: kube-prometheus-stack-93.11.1
+    app.kubernetes.io/version: 94.1.0
+    chart: kube-prometheus-stack-94.1.0
     heritage: Helm
     release: kube-prometheus-stack
   name: kube-prometheus-stack-admission
@@ -108578,8 +108628,8 @@ metadata:
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: kube-prometheus-stack-prometheus-operator
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 93.11.1
-    chart: kube-prometheus-stack-93.11.1
+    app.kubernetes.io/version: 94.1.0
+    chart: kube-prometheus-stack-94.1.0
     heritage: Helm
     release: kube-prometheus-stack
   name: kube-prometheus-stack-admission-create
@@ -108594,8 +108644,8 @@ spec:
         app.kubernetes.io/managed-by: Helm
         app.kubernetes.io/name: kube-prometheus-stack-prometheus-operator
         app.kubernetes.io/part-of: kube-prometheus-stack
-        app.kubernetes.io/version: 93.11.1
-        chart: kube-prometheus-stack-93.11.1
+        app.kubernetes.io/version: 94.1.0
+        chart: kube-prometheus-stack-94.1.0
         heritage: Helm
         release: kube-prometheus-stack
       name: kube-prometheus-stack-admission-create
@@ -108642,8 +108692,8 @@ metadata:
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: kube-prometheus-stack-prometheus-operator
     app.kubernetes.io/part-of: kube-prometheus-stack
-    app.kubernetes.io/version: 93.11.1
-    chart: kube-prometheus-stack-93.11.1
+    app.kubernetes.io/version: 94.1.0
+    chart: kube-prometheus-stack-94.1.0
     heritage: Helm
     release: kube-prometheus-stack
   name: kube-prometheus-stack-admission-patch
@@ -108658,8 +108708,8 @@ spec:
         app.kubernetes.io/managed-by: Helm
         app.kubernetes.io/name: kube-prometheus-stack-prometheus-operator
         app.kubernetes.io/part-of: kube-prometheus-stack
-        app.kubernetes.io/version: 93.11.1
-        chart: kube-prometheus-stack-93.11.1
+        app.kubernetes.io/version: 94.1.0
+        chart: kube-prometheus-stack-94.1.0
         heritage: Helm
         release: kube-prometheus-stack
       name: kube-prometheus-stack-admission-patch
